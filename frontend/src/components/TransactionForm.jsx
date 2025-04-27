@@ -8,6 +8,23 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel }) 
     const [transactionNotes, setTransactionNotes] = useState("");
     const [transactionCategoryId, setTransactionCategoryId] = useState("");
     const [transactionWalletId, setTransactionWalletId] = useState(wallets[0]?.id || "");
+    const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState("");
+
+    const handleNewCategory = async () => {
+        try {
+            const response = await api.post("/api/categories/", {
+                name: newCategoryName
+            });
+            setTransactionCategoryId(response.data.id);
+            setShowNewCategoryInput(false);
+            setNewCategoryName("");
+            // You might want to refresh the categories list here
+        } catch (error) {
+            console.error("Error creating category:", error);
+            alert("Failed to create category. Please try again.");
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -76,16 +93,59 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel }) 
                     <option key={wallet.id} value={wallet.id}>{wallet.name}</option>
                 ))}
             </select>
-            <select
-                value={transactionCategoryId}
-                onChange={(e) => setTransactionCategoryId(e.target.value)}
-                className="form-input"
-            >
-                <option value="">Select Category (Optional)</option>
-                {categories.map(category => (
-                    <option key={category.id} value={category.id}>{category.name}</option>
-                ))}
-            </select>
+
+            {transactionType === "expense" && (
+                <>
+                    <select
+                        value={transactionCategoryId}
+                        onChange={(e) => {
+                            if (e.target.value === "new") {
+                                setShowNewCategoryInput(true);
+                                setTransactionCategoryId("");
+                            } else {
+                                setTransactionCategoryId(e.target.value);
+                            }
+                        }}
+                        className="form-input"
+                    >
+                        <option value="">Select Category (Optional)</option>
+                        {categories.map(category => (
+                            <option key={category.id} value={category.id}>{category.name}</option>
+                        ))}
+                        <option value="new">+ Create New Category</option>
+                    </select>
+
+                    {showNewCategoryInput && (
+                        <div className="new-category-input">
+                            <input
+                                type="text"
+                                placeholder="New Category Name"
+                                value={newCategoryName}
+                                onChange={(e) => setNewCategoryName(e.target.value)}
+                                className="form-input"
+                            />
+                            <button
+                                type="button"
+                                onClick={handleNewCategory}
+                                className="form-button"
+                            >
+                                Add Category
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowNewCategoryInput(false);
+                                    setNewCategoryName("");
+                                }}
+                                className="form-button cancel"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    )}
+                </>
+            )}
+
             <textarea
                 placeholder="Notes (Optional)"
                 value={transactionNotes}
