@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import "../styles/Form.css";
 
 function Form({route, method}) {
     const [firstName, setFirstName] = useState("");
@@ -19,12 +20,15 @@ function Form({route, method}) {
 
         try {
             const data = method === "login" 
-                ? { email, password }
+                ? { username: email, password }
                 : { first_name: firstName, last_name: lastName, email, password };
 
+            console.log("Sending data:", data);
+            
             const response = await api.post(route, data);
 
             if (response.data) {
+                console.log("Response data:", response.data);
                 if (method === "login") {
                     localStorage.setItem(ACCESS_TOKEN, response.data.access);
                     localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
@@ -33,7 +37,13 @@ function Form({route, method}) {
             }
         } catch (error) {
             console.error("Error:", error);
-            alert(error);
+            if (error.response) {
+                console.error("Response data:", error.response.data);
+                console.error("Status:", error.response.status);
+                alert(`Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
+            } else {
+                alert(error);
+            }
         } finally {
             setLoading(false);
         }
@@ -81,8 +91,8 @@ function Form({route, method}) {
                 required
             />
 
-            <button className="form-button" type="submit" disabled={loading}>
-                {loading ? "Loading..." : name}
+            <button className="form-button" type="submit">
+                {name}
             </button>
         </form>
     );
