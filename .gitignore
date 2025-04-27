@@ -1,0 +1,39 @@
+# ---- Python/Django ----
+venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+db.sqlite3
+*.log
+*.pot
+*.pyc
+.DS_Store
+*.pyo
+*.pyd
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+local_settings.py
+.env
+.env.local
+
+# ---- Node/Vite/React ----
+node_modules/
+dist/
+build/
+*.log
+*.env
+.env.*
+.vite/
+*.tsbuildinfo
+
+# ---- General ----
+.idea/
+.vscode/
+*.swp
+*.swo
+*.bak
+*.tmp
+*~
+Thumbs.db
