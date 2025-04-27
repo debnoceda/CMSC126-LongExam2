@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -23,7 +23,10 @@ function Logout() {
 }
 
 function RegisterAndLogout() {
-  localStorage.clear();
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   return <Register />;
 }
 
