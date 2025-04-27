@@ -32,9 +32,10 @@ cd CMSC126-LongExam2
 ```
 
 ### 2. Setup Backend
-cd backend
 
 ```bash
+cd backend
+
 # Create a virtual environment
 python -m venv venv
 # or
@@ -67,8 +68,4 @@ cd frontend
 
 #Install dependencies
 npm install axios react-router-dom jwt-decode
-
-
-
-
-
+```
