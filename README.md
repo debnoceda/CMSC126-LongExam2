@@ -34,8 +34,12 @@ cd CMSC126-LongExam2
 ### 2. Setup Backend
 
 ```bash
+cd backend
+
 # Create a virtual environment
 python -m venv venv
+# or
+python3 -m venv venv
 
 # Activate the virtual environment
 # Windows:
@@ -48,9 +52,13 @@ pip install -r requirements.txt
 
 # Apply migrations
 python manage.py migrate
+# or
+python3 manage.py migrate
 
 # Run Django server
 python manage.py runserver
+# or
+python3 manage.py runserver
 ```
 
 ### 3. Setup Frontend
@@ -60,8 +68,4 @@ cd frontend
 
 #Install dependencies
 npm install axios react-router-dom jwt-decode
-
-
-
-
-
+```
