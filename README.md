@@ -90,8 +90,8 @@ The backend will be available at `http://localhost:8000`
 Open another terminal in the frontend directory:
 
 ```bash
-# Change directory to backend
-cd backend
+# Change directory to frontend
+cd frontend
 
 # Start the Vite development server
 npm run dev
