@@ -69,3 +69,42 @@ cd frontend
 #Install dependencies
 npm install axios react-router-dom jwt-decode
 ```
+
+## 🚀 Running the Application
+
+### Running the Backend
+Open a terminal in the backend directory:
+```bash
+# Make sure your virtual environment is activated
+venv\Scripts\activate
+
+# Change directory to backend
+cd backend
+
+# Start the Django server
+python manage.py runserver
+```
+The backend will be available at `http://localhost:8000`
+
+### Running the Frontend
+Open another terminal in the frontend directory:
+
+```bash
+# Change directory to backend
+cd backend
+
+# Start the Vite development server
+npm run dev
+```
+The frontend will be available at `http://localhost:5173`
+
+## 📝 Usage
+1. Open `http://localhost:5173` in your browser
+2. Register a new account or login with existing credentials
+3. Start managing your budget!
+
+---
+
+## ⚠️ Important Notes
+- Keep both backend and frontend servers running while using the application
+- The backend must be running for the frontend to work properly
