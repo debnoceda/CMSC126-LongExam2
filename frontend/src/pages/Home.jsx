@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../api";
 import "../styles/Home.css";
-import Header from "../components/Header";
 
 function Home() {
     const [wallets, setWallets] = useState([]);
@@ -126,7 +125,6 @@ function Home() {
     if (loading) {
         return (
             <div>
-                <Header />
                 <div className="loading">Loading...</div>
             </div>
         );
@@ -134,7 +132,6 @@ function Home() {
 
     return (
         <div>
-            <Header />
             <div className="home-container">
                 <div className="wallets-section">
                     <div className="section-header">
