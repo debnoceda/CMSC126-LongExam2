@@ -6,7 +6,7 @@ router = DefaultRouter()
 router.register(r'categories', views.CategoryViewSet)
 router.register(r'wallets', views.WalletViewSet, basename='wallet')
 router.register(r'transactions', views.TransactionViewSet, basename='transaction')
-router.register(r'users', views.UserViewSet)
+router.register(r'users', views.UserViewSet, basename='user')
 
 urlpatterns = [
     path('', include(router.urls)),
