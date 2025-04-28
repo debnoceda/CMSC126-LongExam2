@@ -5,39 +5,36 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel }) 
     const [transactionTitle, setTransactionTitle] = useState("");
     const [transactionAmount, setTransactionAmount] = useState("");
     const [transactionType, setTransactionType] = useState("expense");
+    const [transactionDate, setTransactionDate] = useState(() => {
+        const today = new Date().toISOString().split('T')[0];
+        return today;
+    });
     const [transactionNotes, setTransactionNotes] = useState("");
     const [transactionCategoryId, setTransactionCategoryId] = useState("");
     const [transactionWalletId, setTransactionWalletId] = useState(wallets[0]?.id || "");
-    const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
-    const [newCategoryName, setNewCategoryName] = useState("");
-
-    const handleNewCategory = async () => {
-        try {
-            const response = await api.post("/api/categories/", {
-                name: newCategoryName
-            });
-            setTransactionCategoryId(response.data.id);
-            setShowNewCategoryInput(false);
-            setNewCategoryName("");
-            // You might want to refresh the categories list here
-        } catch (error) {
-            console.error("Error creating category:", error);
-            alert("Failed to create category. Please try again.");
-        }
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const today = new Date();
+        const inputDate = new Date(transactionDate);
+
+        if (inputDate > today) {
+            alert("Date cannot be in the future.");
+            return;
+        }
+
         try {
             const response = await api.post("/api/transactions/", {
                 title: transactionTitle,
                 amount: parseFloat(transactionAmount),
                 transaction_type: transactionType,
+                date: transactionDate,
                 notes: transactionNotes,
                 wallet_id: parseInt(transactionWalletId),
                 category_id: parseInt(transactionCategoryId) || null
             });
-            
+
             onTransactionAdded(response.data);
             resetForm();
         } catch (error) {
@@ -47,9 +44,11 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel }) 
     };
 
     const resetForm = () => {
+        const today = new Date().toISOString().split('T')[0];
         setTransactionTitle("");
         setTransactionAmount("");
         setTransactionType("expense");
+        setTransactionDate(today);
         setTransactionNotes("");
         setTransactionCategoryId("");
     };
@@ -82,6 +81,16 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel }) 
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
             </select>
+
+            <input
+                type="date"
+                value={transactionDate}
+                onChange={(e) => setTransactionDate(e.target.value)}
+                required
+                className="form-input"
+                max={new Date().toISOString().split('T')[0]} // disables future dates in calendar picker
+            />
+
             <select
                 value={transactionWalletId}
                 onChange={(e) => setTransactionWalletId(e.target.value)}
@@ -95,55 +104,19 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel }) 
             </select>
 
             {transactionType === "expense" && (
-                <>
-                    <select
-                        value={transactionCategoryId}
-                        onChange={(e) => {
-                            if (e.target.value === "new") {
-                                setShowNewCategoryInput(true);
-                                setTransactionCategoryId("");
-                            } else {
-                                setTransactionCategoryId(e.target.value);
-                            }
-                        }}
-                        className="form-input"
-                    >
-                        <option value="">Select Category (Optional)</option>
-                        {categories.map(category => (
-                            <option key={category.id} value={category.id}>{category.name}</option>
-                        ))}
-                        <option value="new">+ Create New Category</option>
-                    </select>
-
-                    {showNewCategoryInput && (
-                        <div className="new-category-input">
-                            <input
-                                type="text"
-                                placeholder="New Category Name"
-                                value={newCategoryName}
-                                onChange={(e) => setNewCategoryName(e.target.value)}
-                                className="form-input"
-                            />
-                            <button
-                                type="button"
-                                onClick={handleNewCategory}
-                                className="form-button"
-                            >
-                                Add Category
-                            </button>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setShowNewCategoryInput(false);
-                                    setNewCategoryName("");
-                                }}
-                                className="form-button cancel"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    )}
-                </>
+                <select
+                    value={transactionCategoryId}
+                    onChange={(e) => setTransactionCategoryId(e.target.value)}
+                    required
+                    className="form-input"
+                >
+                    <option value="">Select Category</option>
+                    {categories.map(category => (
+                        <option key={category.id} value={category.id}>
+                            {category.name}
+                        </option>
+                    ))}
+                </select>
             )}
 
             <textarea
