@@ -28,6 +28,30 @@ class UserSerializer(serializers.ModelSerializer):
         ret['monthly_budget'] = instance.profile.monthly_budget
         return ret
     
+    def update(self, instance, validated_data):
+        
+        monthly_budget = validated_data.pop('monthly_budget', None)
+        password = validated_data.pop('password', None)
+        email = validated_data.pop('email', None)
+        if email:
+            instance.username = email
+            instance.email = email
+        
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        if password:
+            instance.set_password(password)
+        
+        instance.save()
+
+        if monthly_budget is not None:
+            instance.profile.monthly_budget = monthly_budget
+            instance.profile.save()
+
+        return instance
+
+    
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
