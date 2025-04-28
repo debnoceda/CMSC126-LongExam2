@@ -93,6 +93,10 @@ p {
     color: var(--gray);
 }
 
+.white-color {
+    color: white;
+}
+
 /* Background color classes */
 .bg-main-color {
     background-color: var(--green);
@@ -108,4 +112,8 @@ p {
 
 .bg-gray {
     background-color: var(--gray);
+}
+
+.bg-white {
+    background-color: white;
 }
