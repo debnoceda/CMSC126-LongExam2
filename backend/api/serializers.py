@@ -65,9 +65,7 @@ class WalletSerializer(serializers.ModelSerializer):
         read_only_fields = ['user']
 
     def create(self, validated_data):
-        user = self.context['request'].user
-        wallet = Wallet.objects.create(user=user, **validated_data)
-        return wallet
+        return Wallet.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
@@ -120,5 +118,4 @@ class TransactionSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
-    
     

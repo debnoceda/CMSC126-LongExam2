@@ -20,6 +20,11 @@ class WalletViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+    
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        if instance.balance < 0:
+            raise serializer.ValidationError("Wallet balance cannot be negative.")
 
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
@@ -30,6 +35,17 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        if instance.transaction_type == 'expense' and instance.wallet.balance < instance.amount:
+            raise serializer.ValidationError("Insufficient funds in the wallet.")
+        if instance.transaction_type == 'income':
+            instance.wallet.balance += instance.amount
+        else:
+            instance.wallet.balance -= instance.amount
+        instance.wallet.save()
+        instance.save()
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
