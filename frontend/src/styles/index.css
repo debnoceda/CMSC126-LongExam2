@@ -76,6 +76,10 @@ p {
     font-weight: bold;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 /* Text color classes */
 .main-color {
     color: var(--green);
