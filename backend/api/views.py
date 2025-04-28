@@ -39,3 +39,8 @@ class UserViewSet(viewsets.ModelViewSet):
         if self.action == 'create':
             return [AllowAny()]
         return [IsAuthenticated()]
+    
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return User.objects.none()
+        return User.objects.filter(id=self.request.user.id)
