@@ -9,13 +9,42 @@ function Form({route, method}) {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const navigate = useNavigate();
 
     const name = method === "login" ? "Login" : "Register";
 
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+        if (!passwordRegex.test(password)) {
+            setPasswordError("Password must contain at least 1 uppercase letter, 1 number, and be minimum 8 characters");
+            return false;
+        }
+        setPasswordError("");
+        return true;
+    };
+
+    const validateConfirmPassword = (password, confirmPass) => {
+        if (password !== confirmPass) {
+            setConfirmPasswordError("Passwords do not match");
+            return false;
+        }
+        setConfirmPasswordError("");
+        return true;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        if (method === "register") {
+            if (!validatePassword(password) || !validateConfirmPassword(password, confirmPassword)) {
+                return;
+            }
+        }
+        
         setLoading(true);
 
         try {
@@ -82,14 +111,39 @@ function Form({route, method}) {
                 onChange={(e) => setEmail(e.target.value)}
                 required
             />
-            <input
-                className="form-input"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
+            <div className="password-container">
+                <input
+                    className="form-input"
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => {
+                        setPassword(e.target.value);
+                        if (method === "register") {
+                            validatePassword(e.target.value);
+                        }
+                    }}
+                    required
+                />
+                {passwordError && <div className="error-message">{passwordError}</div>}
+            </div>
+
+            {method === "register" && (
+                <div className="password-container">
+                    <input
+                        className="form-input"
+                        type="password"
+                        placeholder="Confirm Password"
+                        value={confirmPassword}
+                        onChange={(e) => {
+                            setConfirmPassword(e.target.value);
+                            validateConfirmPassword(password, e.target.value);
+                        }}
+                        required
+                    />
+                    {confirmPasswordError && <div className="error-message">{confirmPasswordError}</div>}
+                </div>
+            )}
 
             <button className="form-button" type="submit">
                 {name}
