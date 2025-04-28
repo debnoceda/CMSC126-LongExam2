@@ -1,0 +1,62 @@
+:root {
+    --green: #84AE26;
+    --yellow: #F1B249;
+    --red: #CD3738;
+    --gray: rgba(0, 0, 0, 0.2);
+}
+  
+/* Global text color */
+html {
+    font-size: 8px; 
+    color: var(--green);
+}
+
+h1 {
+    font-size: 5rem; 
+}
+
+h2 {
+    font-size: 3rem; 
+}
+
+p {
+    font-size: 2rem; 
+}
+
+.subtitle {
+    font-size: 1.5rem; 
+}
+
+/* Text color classes */
+.main-color {
+    color: var(--green);
+}
+
+.yellow-color {
+    color: var(--yellow); 
+}
+
+.red-color {
+    color: var(--red); 
+}
+
+.gray-color {
+    color: var(--gray); 
+}
+  
+/* Background color classes */
+.bg-main-color {
+    background-color: var(--green);
+}
+
+.bg-yellow-color {
+    background-color: var(--yellow); 
+}
+
+.bg-red-color {
+    background-color: var(--red); 
+}
+
+.bg-gray {
+    background-color: var(--gray);
+}
