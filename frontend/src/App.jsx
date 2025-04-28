@@ -7,6 +7,7 @@ import Analytics from './pages/Analytics';
 import Transaction from './pages/Transaction';
 import Profile from './pages/Profile';
 import LandingPage from './pages/LandingPage';
+import Setup from './pages/Setup';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -42,6 +43,7 @@ function App() {
         
         {/* Protected Routes with Layout */}
         <Route path="/" element={<ProtectedRoute><Layout><Navigate to="/home" /></Layout></ProtectedRoute>} />
+        <Route path="/setup" element={<ProtectedRoute><Layout><Setup /></Layout></ProtectedRoute>} />
         <Route path="/home" element={<ProtectedRoute><Layout><Home /></Layout></ProtectedRoute>} />
         <Route path="/transaction" element={<ProtectedRoute><Layout><Transaction /></Layout></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><Layout><Analytics /></Layout></ProtectedRoute>} />
