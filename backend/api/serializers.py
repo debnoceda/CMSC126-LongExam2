@@ -64,6 +64,17 @@ class WalletSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'balance', 'user']
         read_only_fields = ['user']
 
+    def create(self, validated_data):
+        user = self.context['request'].user
+        wallet = Wallet.objects.create(user=user, **validated_data)
+        return wallet
+    
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.balance = validated_data.get('balance', instance.balance)
+        instance.save()
+        return instance
+
 
 class TransactionSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
