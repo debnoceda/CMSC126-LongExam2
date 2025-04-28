@@ -34,7 +34,17 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Transaction.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        instance = serializer.save(user=self.request.user)
+
+        #Update wallet balance based on transaction type
+        if instance.transaction_type == 'income':
+            instance.wallet.balance += instance.amount
+        else:
+            if instance.wallet.balance < instance.amount:
+                raise serializer.ValidationError("Insufficient funds in the wallet.")
+            instance.wallet.balance -= instance.amount
+        
+        instance.wallet.save()
 
     def perform_update(self, serializer):
         instance = serializer.save()
