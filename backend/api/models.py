@@ -26,7 +26,7 @@ class Transaction(models.Model):
     title = models.CharField(max_length=100)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_type = models.CharField(max_length=7, choices=TRANSACTION_TYPES)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     notes = models.TextField(blank=True, null=True)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)

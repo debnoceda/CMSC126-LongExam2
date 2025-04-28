@@ -46,3 +46,9 @@ class TransactionSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("Amount must be positive.")
         return value
+    
+    def validate_date(self, value):
+        from datetime import date
+        if value > date.today():
+            raise serializers.ValidationError("Date cannot be in the future.")
+        return value
