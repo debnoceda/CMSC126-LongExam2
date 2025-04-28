@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -25,6 +26,13 @@ class WalletViewSet(viewsets.ModelViewSet):
         instance = serializer.save()
         if instance.balance < 0:
             raise serializer.ValidationError("Wallet balance cannot be negative.")
+        instance.save()
+    
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            raise serializers.ValidationError("You do not have permission to delete this wallet.")
+        instance.delete()
+
 
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
@@ -56,6 +64,16 @@ class TransactionViewSet(viewsets.ModelViewSet):
             instance.wallet.balance -= instance.amount
         instance.wallet.save()
         instance.save()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            raise serializers.ValidationError("You do not have permission to delete this transaction.")
+        if instance.transaction_type == 'income':
+            instance.wallet.balance -= instance.amount
+        else:
+            instance.wallet.balance += instance.amount
+        instance.wallet.save()
+        instance.delete()
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
