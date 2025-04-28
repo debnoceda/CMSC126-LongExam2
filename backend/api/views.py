@@ -70,3 +70,9 @@ class UserViewSet(viewsets.ModelViewSet):
         if not self.request.user.is_authenticated:
             return User.objects.none()
         return User.objects.filter(id=self.request.user.id)
+    
+    def perform_update(self, serializer):
+        # Ensure users can only update their own profile
+        if serializer.instance.id != self.request.user.id:
+            raise serializer.ValidationError("You can only update your own profile.")
+        serializer.save()
