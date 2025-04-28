@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Analytics from './pages/Analytics';
 import Transaction from './pages/Transaction';
 import Profile from './pages/Profile';
+import LandingPage from './pages/LandingPage';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -34,6 +35,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<RegisterAndLogout />} />
         <Route path="/logout" element={<Logout />} />
