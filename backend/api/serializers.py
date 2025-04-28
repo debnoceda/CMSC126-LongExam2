@@ -1,14 +1,17 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Category, Wallet, Transaction
+from .models import Category, Wallet, Transaction, UserProfile
 
 class UserSerializer(serializers.ModelSerializer):
+    monthly_budget = serializers.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'password']
+        fields = ['id', 'email', 'first_name', 'last_name', 'password', 'monthly_budget']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        monthly_budget = validated_data.pop('monthly_budget', 0.00)
         email = validated_data.pop('email')
         password = validated_data.pop('password')
         user = User.objects.create_user(
@@ -17,7 +20,13 @@ class UserSerializer(serializers.ModelSerializer):
             password=password,
             **validated_data
         )
+        UserProfile.objects.create(user=user, monthly_budget=monthly_budget)
         return user
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['monthly_budget'] = instance.profile.monthly_budget
+        return ret
     
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
