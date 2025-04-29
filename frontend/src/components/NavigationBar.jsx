@@ -17,7 +17,7 @@ const NavigationBar = () => {
             text.style.transform = "translateX(-20px)";
             text.style.opacity = "0";
             setTimeout(() => {
-                text.style.transition = "transform 0.7s ease, opacity 0.3s ease";
+                text.style.transition = "transform 0.3s ease, opacity 0.3s ease";
                 text.style.transform = "translateX(0)";
                 text.style.opacity = "1";
             }, 10);
@@ -29,7 +29,7 @@ const NavigationBar = () => {
             {/* Home */}
             <div className="nav-item" onClick={() => handleClick(0)}>
                 <button className="nav-btn">
-                    <Icon icon="material-symbols:home-outline-rounded" className="icon" style={{ fontSize: "4.25rem" }} />
+                    <Icon icon={clicked === 0 ? "material-symbols:home-rounded" : "material-symbols:home-outline-rounded"} className="icon" style={{ fontSize: "4.25rem" }} />
                 </button>
                 {clicked === 0 && <span ref={refs[0]} className={`nav-text bold ${clicked === 0 ? "show" : ""}`} onClick={(e) => e.stopPropagation()}>Home</span>}
             </div>
@@ -37,7 +37,7 @@ const NavigationBar = () => {
             {/* Wallet */}
             <div className="nav-item" onClick={() => handleClick(1)}>
                 <button className={"nav-btn"}>
-                    <Icon icon="lucide:wallet" className="icon" />
+                    <Icon icon={clicked === 1 ? "fluent:wallet-credit-card-32-filled" : "fluent:wallet-credit-card-32-regular"} className="icon" style={{ stroke: "black", strokeWidth: 0.75 , fontSize: "4rem" }}/>
                 </button>
                 {clicked === 1 && <span ref={refs[1]} className={`nav-text bold ${clicked === 1 ? "show" : ""}`} onClick={(e) => e.stopPropagation()}>Wallet</span>}
             </div>
@@ -45,7 +45,7 @@ const NavigationBar = () => {
             {/* Transactions */}
             <div className="nav-item" onClick={() => handleClick(2)}>
                 <button className={"nav-btn"}>
-                    <Icon icon="icon-park-outline:transaction-order" className="icon" />
+                    <Icon icon={clicked === 2 ? "icon-park-solid:transaction-order" : "icon-park-outline:transaction-order"} className="icon" style={{ fontSize: "4rem"}}/>
                 </button>
                 {clicked === 2 && <span ref={refs[2]} className={`nav-text bold ${clicked === 2 ? "show" : ""}`} onClick={(e) => e.stopPropagation()}>Transactions</span>}
             </div>
@@ -53,7 +53,7 @@ const NavigationBar = () => {
             {/* Analytics */}
             <div className="nav-item" onClick={() => handleClick(3)}>
                 <button className={"nav-btn"}>
-                    <Icon icon="grommet-icons:analytics" className="icon" />
+                    <Icon icon={clicked === 3 ? "material-symbols:analytics" : "material-symbols:analytics-outline"} className="icon" style={{ fontSize: "4.25rem"}}/>
                 </button>
                 {clicked === 3 && <span ref={refs[3]} className={`nav-text bold ${clicked === 3 ? "show" : ""}`}>Analytics</span>}
             </div>
