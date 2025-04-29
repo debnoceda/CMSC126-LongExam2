@@ -22,7 +22,7 @@ body {
 }
 
 /* Navbar */
-.navbar {
+.landing-navbar {
     display: flex;
     align-items: center;
     justify-content: center; /* Center horizontally */
@@ -30,7 +30,7 @@ body {
     background: transparent;
 }
 
-.navbar a {
+.landing-navbar a {
     font-size: 2rem;
     color: black;
     font-weight: 500;
@@ -39,7 +39,7 @@ body {
     transition: color 0.3s ease;
 }
 
-.navbar a::after {
+.landing-navbar a::after {
     content: "";
     position: absolute;
     left: 0;
@@ -50,11 +50,11 @@ body {
     transition: width 0.3s ease;
 }
 
-.navbar a:hover {
+.landing-navbar a:hover {
     color: white;
 }
 
-.navbar a:hover::after {
+.landing-navbar a:hover::after {
     width: 100%;
 }
 
@@ -115,53 +115,60 @@ body {
 }
 
 @media (max-width: 768px) {
-    body {
-        padding: 2rem;
-    }
-
-    .navbar {
+    .landing-navbar {
         flex-direction: row;
         gap: 2rem;
     }
 
     .logo {
         font-size: 2.5rem;
+        padding: 0.8rem 1.6rem;
     }
 
-    .navbar a {
+    .landing-navbar a {
         font-size: 1.5rem;
     }
 
     .landing-hero {
+        gap: 2rem;
         margin-top: 5rem;
-        gap: 2.5rem;
     }
 
     .landing-hero h1 {
-        font-size: 8rem;
+        font-size: 7rem;
     }
 
     .main-button {
-        font-size: 1.7rem;
+        font-size: 2rem;
         padding: 1rem 2rem;
     }
 }
 
 @media (max-width: 480px) {
+    .landing-navbar {
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+
+    .landing-hero {
+        gap: 1.5rem;
+    }
+
     .landing-hero h1 {
         font-size: 5rem;
     }
 
     .logo {
         font-size: 2rem;
+        padding: 0.6rem 1.2rem;
     }
 
-    .navbar a {
-        font-size: 1.3rem;
+    .landing-navbar a {
+        font-size: 1.2rem;
     }
 
     .main-button {
-        font-size: 1.5rem;
+        font-size: 1.7rem;
         padding: 0.8rem 1.6rem;
     }
 }

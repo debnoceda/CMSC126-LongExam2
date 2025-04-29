@@ -6,7 +6,7 @@ function LandingPage() {
   return (
     <div className="landing-page">
       <header className="header">
-        <nav className="navbar">
+        <nav className="landing-navbar">
           <a href="/login">Log In</a>
           <div className="logo">Frogetta</div>
           <a href="/register">Sign Up</a>
