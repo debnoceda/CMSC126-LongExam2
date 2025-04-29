@@ -85,6 +85,7 @@ body {
     background-color: var(--green);
     font-size: 3rem;
     border: 2px solid black;
+    text-decoration: none;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }

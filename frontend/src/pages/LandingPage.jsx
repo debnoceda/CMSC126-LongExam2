@@ -16,7 +16,7 @@ function LandingPage() {
       <main className="landing-hero">
         <h1 className="landing-title">Hop into</h1>
         <h1 className="landing-subtitle white-color">SMART FINANCES</h1>
-        <a className="main-button">Get Started</a>
+        <a href = "#signup" className="main-button">Get Started</a>
       </main>
     </div>
   );
