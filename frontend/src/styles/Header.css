@@ -1,0 +1,56 @@
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+}
+
+.header-title {
+    color: var(--green);
+    cursor: pointer;
+}
+
+.header-nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.header-greeting {
+    font-style: normal;
+    font-size: 3rem;
+}
+
+.header-name {
+    color: var(--green);
+}
+
+.header-btn {
+    display: block;
+    width: 7rem;
+    height: 7rem;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 7.5rem;
+    transition: background-color 0.3s;
+    border: solid rgba(0, 0, 0, 0.5);
+}
+
+.addtransaction {
+    background: var(--yellow);
+}
+
+.profile {
+    background: var(--green);
+}
+
+.profile-img {
+    width: 7rem;
+    height: 7rem;
+    object-fit: cover;
+}
+
+.header-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}

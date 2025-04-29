@@ -42,9 +42,14 @@
     box-sizing: border-box;
 }
 
+button {
+    all: unset;
+    cursor: pointer;
+}
+
 /* Global text color */
 html {
-    font-size: 8px;
+    font-size: 6px;
     color: black;
 }
 
