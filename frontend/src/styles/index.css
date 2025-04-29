@@ -47,6 +47,10 @@ button {
     cursor: pointer;
 }
 
+input {
+    all: unset;
+}
+
 /* Global text color */
 html {
     font-size: 6px;
