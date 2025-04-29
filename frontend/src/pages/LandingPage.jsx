@@ -1,10 +1,23 @@
 import React from 'react';
+import '../styles/index.css';
+import '../styles/Landing.css';
 
 function LandingPage() {
   return (
-    <div className="container">
-      <h1>LandingPage</h1>
-      {/* Add your transaction content here */}
+    <div className="landing-page">
+      <header className="header">
+        <nav className="navbar">
+          <a href="/login">Log In</a>
+          <div className="logo">Frogetta</div>
+          <a href="/register">Sign Up</a>
+        </nav>
+      </header>
+
+      <main className="landing-hero">
+        <h1 className="landing-title">Hop into</h1>
+        <h1 className="landing-subtitle white-color">SMART FINANCES</h1>
+        <a href = "/register" className="main-button">Get Started</a>
+      </main>
     </div>
   );
 }

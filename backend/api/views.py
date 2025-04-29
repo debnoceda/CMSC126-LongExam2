@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -25,6 +26,13 @@ class WalletViewSet(viewsets.ModelViewSet):
         instance = serializer.save()
         if instance.balance < 0:
             raise serializer.ValidationError("Wallet balance cannot be negative.")
+        instance.save()
+    
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            raise serializers.ValidationError("You do not have permission to delete this wallet.")
+        instance.delete()
+
 
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
@@ -34,7 +42,17 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Transaction.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        instance = serializer.save(user=self.request.user)
+
+        #Update wallet balance based on transaction type
+        if instance.transaction_type == 'income':
+            instance.wallet.balance += instance.amount
+        else:
+            if instance.wallet.balance < instance.amount:
+                raise serializer.ValidationError("Insufficient funds in the wallet.")
+            instance.wallet.balance -= instance.amount
+        
+        instance.wallet.save()
 
     def perform_update(self, serializer):
         instance = serializer.save()
@@ -46,6 +64,16 @@ class TransactionViewSet(viewsets.ModelViewSet):
             instance.wallet.balance -= instance.amount
         instance.wallet.save()
         instance.save()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            raise serializers.ValidationError("You do not have permission to delete this transaction.")
+        if instance.transaction_type == 'income':
+            instance.wallet.balance -= instance.amount
+        else:
+            instance.wallet.balance += instance.amount
+        instance.wallet.save()
+        instance.delete()
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -60,3 +88,9 @@ class UserViewSet(viewsets.ModelViewSet):
         if not self.request.user.is_authenticated:
             return User.objects.none()
         return User.objects.filter(id=self.request.user.id)
+    
+    def perform_update(self, serializer):
+        # Ensure users can only update their own profile
+        if serializer.instance.id != self.request.user.id:
+            raise serializer.ValidationError("You can only update your own profile.")
+        serializer.save()
