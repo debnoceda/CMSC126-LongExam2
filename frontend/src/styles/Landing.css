@@ -15,12 +15,6 @@
     background: transparent !important;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    background: transparent;
-}
-
 /* Navbar */
 .landing-navbar {
     display: flex;
@@ -106,7 +100,7 @@ body {
 }
 
 .landing-hero h1 {
-    font-size: 14rem;
+    font-size: 16rem;
     line-height: 1.2;
 }
 
@@ -135,7 +129,7 @@ body {
     }
 
     .landing-hero h1 {
-        font-size: 7rem;
+        font-size: 12rem;
     }
 
     .main-button {
@@ -155,7 +149,7 @@ body {
     }
 
     .landing-hero h1 {
-        font-size: 5rem;
+        font-size: 8rem;
     }
 
     .logo {
