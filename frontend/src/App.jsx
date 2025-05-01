@@ -11,6 +11,7 @@ import LandingPage from './pages/LandingPage';
 import Setup from './pages/Setup';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
+import Wallets from './pages/Wallets';
 
 function Layout({ children }) {
   return (
@@ -46,7 +47,8 @@ function App() {
         <Route path="/" element={<ProtectedRoute><Layout><Navigate to="/home" /></Layout></ProtectedRoute>} />
         <Route path="/setup" element={<ProtectedRoute><Layout><Setup /></Layout></ProtectedRoute>} />
         <Route path="/home" element={<ProtectedRoute><Layout><Home /></Layout></ProtectedRoute>} />
-        <Route path="/transaction" element={<ProtectedRoute><Layout><Transaction /></Layout></ProtectedRoute>} />
+        <Route path="/wallets" element={<ProtectedRoute><Layout><Wallets/></Layout></ProtectedRoute>} />
+        <Route path="/transaction" element={<ProtectedRoute><Layout><Transaction/></Layout></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><Layout><Analytics /></Layout></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
         
