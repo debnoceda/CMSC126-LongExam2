@@ -17,9 +17,8 @@ function ModalFooter({ onDelete, onAction, actionTitle}) {
             </button>
             <Button
                 type="small"
-                text={"Done"}
+                text={actionTitle || 'Action'}
                 className="modal-action-button" onClick={onAction}>
-                {actionTitle || 'Action'}
             </Button>
         </footer>
     );

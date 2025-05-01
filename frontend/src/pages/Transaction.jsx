@@ -9,20 +9,13 @@ import '../styles/Transaction.css';
 function Transaction() {
   const [transactions, setTransactions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [wallets, setWallets] = useState([]);
-  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [txRes, walletRes, categoryRes] = await Promise.all([
-          api.get('/api/transactions/'),
-          api.get('/api/wallets/'),
-          api.get('/api/categories/')
-        ]);
-        setTransactions(txRes.data);
-        setWallets(walletRes.data);
-        setCategories(categoryRes.data);
+        const response = await api.get('/api/transactions/');
+        console.log('Transactions:', response.data);
+        setTransactions(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -59,8 +52,14 @@ function Transaction() {
   const columns = useMemo(() => [
     { Header: 'Title', accessor: 'title' },
     { Header: 'Date', accessor: 'date' },
-    { Header: 'Category', accessor: 'category_name' },
-    { Header: 'Wallet', accessor: 'wallet_name' },
+    { 
+      Header: 'Category', 
+      accessor: row => row.category?.name || 'N/A'
+    },
+    { 
+      Header: 'Wallet', 
+      accessor: row => row.wallet?.name || 'N/A'
+    },
     {
       Header: 'Amount',
       accessor: 'amount',
@@ -136,8 +135,12 @@ function Transaction() {
 
           <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <TransactionForm
-              wallets={wallets}
-              categories={categories}
+              wallets={transactions.map(t => t.wallet).filter((w, i, self) => 
+                w && self.findIndex(t => t.id === w.id) === i
+              )}
+              categories={transactions.map(t => t.category).filter((c, i, self) => 
+                c && self.findIndex(t => t.id === c.id) === i
+              )}
               onTransactionAdded={handleTransactionAdded}
               onCancel={() => setIsModalOpen(false)}
             />
