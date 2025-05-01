@@ -20,9 +20,9 @@
 
 .overlay-image {
     position: absolute;
-    right: 0px;
-    transform: translateY(-80%);
-    width: 210px;
+    right: 0;
+    transform: translateY(-15%);
+    width: 24rem;
     height: auto;
   }
 
