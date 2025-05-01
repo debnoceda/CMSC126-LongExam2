@@ -13,6 +13,7 @@
 
 .wallet-card-large {
     height: 36rem;
+    cursor: default;
 }
 
 .wallet-card-small {

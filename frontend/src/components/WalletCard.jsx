@@ -5,7 +5,7 @@ import simImage from "../assets/sim.png";
 function WalletCard({ walletName, balance, size = "large", cardColor = "#ffffff", onClick }) {
     return (
         <button
-            className={`card wallet-card ${size === "small" ? "wallet-card-small" : ""}`}
+            className={`card wallet-card ${size === "small" ? "wallet-card-small" : "wallet-card-large"}`}
             style={{ backgroundColor: cardColor }}
             onClick={onClick}
             disabled={size === "large"}
