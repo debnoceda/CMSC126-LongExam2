@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from './Card';
-import { Icon } from "@iconify-icon/react";
+import { Icon } from "@iconify/react";
 import '../styles/Modal.css';
 
 function Modal({ children, isOpen, onClose, className }) {
