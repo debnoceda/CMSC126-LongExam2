@@ -15,8 +15,7 @@
 
 .modal-content {
     position: relative;
-    max-width: 500px;
-    width: 90%;
+    width: auto;
 }
 
 .modal-card {
