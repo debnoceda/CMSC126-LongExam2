@@ -75,7 +75,7 @@
 }
 
 /* Default Button */
-.default {
+.text-button {
     color: var(--green);
     gap: 1rem;
     font-size: 3rem;
@@ -83,17 +83,11 @@
     margin: 0;
 }
 
-.default:hover {
+.text-button:hover {
     color: #5f8c1f;
     transform: scale(1.05);
 }
 
-.default .btn-icon {
+.text-button .btn-icon {
     font-size: 4rem;
-}
-
-/* Optional custom styling */
-.custom-style {
-    background-color: #6c757d;
-    color: white;
 }
