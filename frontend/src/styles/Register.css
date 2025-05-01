@@ -1,0 +1,26 @@
+.register-page{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+}
+
+.register-form-container{
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.register-page img{
+    width: 100%;
+    justify-self: center;
+    align-self: center;
+}
+
+.register-form-container h1{
+    padding-bottom: 10rem;
+}
