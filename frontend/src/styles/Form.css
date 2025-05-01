@@ -1,9 +1,14 @@
 .name-container{
     display: flex;
-    gap: 10rem;
+    gap: 7rem;
 }
 
 .form-input{
     width: 100%;
     margin-bottom: 5rem;
+}
+
+.btn.large{
+    width: 100%;
+    margin-bottom: 2.5rem;
 }

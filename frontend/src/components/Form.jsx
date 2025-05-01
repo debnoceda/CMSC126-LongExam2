@@ -182,11 +182,10 @@ function Form({route, method}) {
                     />
                 </div>
             )}
-            <Button></Button>
-
-            <button className="form-button" type="submit">
-                {name}
-            </button>
+            <Button
+                type="large"
+                text={name}
+            />
         </form>
     );
 }
