@@ -17,7 +17,7 @@
     font-size: 3rem; /* Adjust size if necessary */
 }
 
-.btn-large, .small {
+.btn-large, .btn-small {
     border-radius: 2.5rem;
     border: solid 0.125rem rgb(0, 0, 0, 0.5);
 }
