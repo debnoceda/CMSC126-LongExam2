@@ -1,0 +1,143 @@
+/* === Custom Datepicker Wrapper === */
+.custom-datepicker {
+    position: relative;
+    width: auto;
+}
+
+/* === Custom Toggle Button === */
+.datepicker-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border: 1px solid #84AE26;
+    border-radius: 1.25rem;
+    background-color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.datepicker-toggle:hover,
+.rs-picker-toggle:hover {
+    background-color: #f0f8e7;
+    border-color: #84AE26;
+    color: #84AE26;
+}
+
+.rs-picker-toggle:focus,
+.rs-picker-toggle.rs-picker-toggle-active {
+    box-shadow: 0 0 0 2px rgba(132, 174, 38, 0.2);
+    border-color: #84AE26;
+}
+
+/* === Toggle Content === */
+.selected-date {
+    font-weight: 500;
+    color: #84AE26;
+}
+
+.datepicker-arrow {
+    font-size: 1.25rem;
+    color: #84AE26;
+}
+
+/* === Hide RSuite Input Box === */
+.rsuite-date-picker.hidden-datepicker-input input {
+    display: none;
+}
+
+.rsuite-date-picker.hidden-datepicker-input .rs-picker-toggle-value {
+    display: contents;
+}
+
+/* === RSuite DatePicker Custom Theme === */
+
+/* Month/Year Dropdowns */
+.rs-calendar-month-dropdown-cell,
+.rs-calendar-year-dropdown-cell {
+    color: #84AE26;
+}
+
+.rs-calendar-month-dropdown-cell:hover,
+.rs-calendar-year-dropdown-cell:hover {
+    background-color: #f0f8e7;
+    color: #84AE26;
+}
+
+.rs-calendar-month-dropdown-cell-active,
+.rs-calendar-year-dropdown-cell-active {
+    color: white;
+    font-weight: bold;
+}
+
+.rs-calendar-month-dropdown-cell-active
+.rs-calendar-month-dropdown-cell-content {
+    background-color: #84AE26;
+}
+
+.rs-calendar-month-dropdown-year-active {
+    color: #84AE26;
+}
+
+/* Calendar Header Titles */
+.rs-picker-toolbar,
+.rs-picker-header,
+.rs-calendar-header-title {
+    color: #84AE26;
+}
+
+.rs-calendar-month-view
+.rs-calendar-header-title-date {
+    color: #84AE26;
+}
+
+/* Calendar Day Cells */
+.rs-calendar-table-cell-content {
+    color: #84AE26;
+    border-radius: 4px;
+}
+
+/* Hovered Day */
+.rs-calendar-table-cell:hover .rs-calendar-table-cell-content {
+    background-color: #f0f8e7;
+    color: #84AE26;
+}
+
+/* Selected Day */
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+    background-color: #84AE26;
+    color: white;
+}
+
+/* Today's Date */
+.rs-calendar-table-cell-is-today .rs-calendar-table-cell-content {
+    border: 1px solid #84AE26;
+    box-shadow: inset 0 0 0 1px #84AE26;
+}
+
+/* Disabled Dates */
+.rs-calendar-table-cell-disabled .rs-calendar-table-cell-content {
+    color: #c7d9a7;
+    cursor: not-allowed;
+}
+
+/* Focused Cell for Keyboard Navigation */
+.rs-calendar-table-cell:focus .rs-calendar-table-cell-content {
+    outline: 2px solid #84AE26;
+}
+
+/* Popover Arrow */
+.rs-picker-menu::before {
+    border-top-color: #84AE26;
+}
+
+.rs-picker-input-group:not(.rs-input-group-disabled):hover {
+    border-color: rgba(132, 174, 38, 1);
+}
+
+.rs-picker-input-group:not(.rs-input-group-disabled).rs-input-group-focus,
+.rs-input-group:focus-within {
+    outline: solid 0.25rem rgba(132, 174, 38, 0.2);
+    border-color: rgba(132, 174, 38, 1);
+}
