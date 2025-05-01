@@ -25,6 +25,8 @@
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
     transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    width: 100%;
 }
 
 /* Style for placeholder text */
@@ -42,6 +44,25 @@
 .input-element.error {
     border-color: #CE4645;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-inner {
+    position: absolute;
+    top: 50%;
+    right: 0.1rem;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: all;
+    z-index: 1;
+    background: transparent;
 }
 
 .input-message-container{

@@ -2,9 +2,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
-    height: 100vh;
-    width: 100vw;
     align-items: center;
+    margin-top: 15rem;
 }
 
 .register-form-container{
@@ -25,3 +24,4 @@
 .register-form-container h1{
     padding-bottom: 10rem;
 }
+
