@@ -1,6 +1,6 @@
-import React from 'react';
-import { Icon } from '@iconify/react';
-import '../styles/Button.css';
+import React from "react";
+import { Icon } from "@iconify/react";
+import "../styles/Button.css";
 
 /**
  * Button Component
@@ -15,25 +15,18 @@ import '../styles/Button.css';
  * />
  */
 
-const Button = ({
-    type = 'default',
-    icon = null,
-    text = null,
-    onClick = () => {},
-    className = '',
-    ...props
-  }) => {
-    const validTypes = ['large', 'small', 'icon-only'];
-    const resolvedType = validTypes.includes(type) ? type : 'text-button';
-  
-    const buttonClass = `btn ${resolvedType} ${className}`;
-  
+const Button = ({ type = "default", icon = null, text = null, onClick = () => {}, className = "", ...props }) => {
+    const validTypes = ["large", "small", "icon-only"];
+    const resolvedType = validTypes.includes(type) ? type : "text-button";
+
+    const buttonClass = `btn btn-${resolvedType} ${className}`;
+
     return (
-      <button className={buttonClass} onClick={onClick} {...props}>
-        {icon && <Icon icon={icon} className="btn-icon" />}
-        {text && resolvedType !== 'icon-only' && <span className="btn-text">{text}</span>}
-      </button>
+        <button className={buttonClass} onClick={onClick} {...props}>
+            {icon && <Icon icon={icon} className="btn-icon" />}
+            {text && resolvedType !== "icon-only" && <span className="btn-text">{text}</span>}
+        </button>
     );
-  };
+};
 
 export default Button;

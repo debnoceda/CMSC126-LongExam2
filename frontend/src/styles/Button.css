@@ -9,21 +9,21 @@
 }
 
 /* Styling for the button icon */
-.large .btn-icon {
+.btn-large .btn-icon {
     font-size: 6.25rem; /* Adjust size if necessary */
 }
 
-.small .btn-icon {
+.btn-small .btn-icon {
     font-size: 3rem; /* Adjust size if necessary */
 }
 
-.large, .small {
+.btn-large, .small {
     border-radius: 2.5rem;
     border: solid 0.125rem rgb(0, 0, 0, 0.5);
 }
 
 /* Large Button */
-.large {
+.btn-large {
     width: 47.5rem;
     padding: 2.5rem;
     gap: 2rem;
@@ -33,12 +33,12 @@
     color: black;
 }
 
-.large:hover {
+.btn-large:hover {
     background-color: #5f8c1f;
 }
 
 /* Small Button */
-.small {
+.btn-small {
     width: auto;
     height: auto;
     padding: 0.625rem 2.5rem;
@@ -50,7 +50,7 @@
     color: black;
 }
 
-.small:hover {
+.btn-small:hover {
     background-color: #d99a3d;
 }
 
