@@ -5,7 +5,7 @@ function LandingPage() {
   useEffect(() => {
     const originalMargin = document.body.style.margin;
     document.body.style.margin = '0';
-
+  
     return () => {
       document.body.style.margin = originalMargin;
     };

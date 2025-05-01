@@ -19,6 +19,7 @@
 .landing-navbar {
     display: flex;
     align-items: center;
+    padding-top: 5rem;
     justify-content: center; /* Center horizontally */
     gap: 3.5rem;
     background: transparent;

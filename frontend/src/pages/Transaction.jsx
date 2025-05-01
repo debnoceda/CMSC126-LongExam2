@@ -52,12 +52,12 @@ function Transaction() {
   const columns = useMemo(() => [
     { Header: 'Title', accessor: 'title' },
     { Header: 'Date', accessor: 'date' },
-    { 
-      Header: 'Category', 
+    {
+      Header: 'Category',
       accessor: row => row.category?.name || 'N/A'
     },
-    { 
-      Header: 'Wallet', 
+    {
+      Header: 'Wallet',
       accessor: row => row.wallet?.name || 'N/A'
     },
     {
@@ -72,7 +72,14 @@ function Transaction() {
     {
       Header: 'Action',
       accessor: 'id',
-      Cell: () => <a href="#">View</a>
+      Cell: () => (
+        <a href="#" onClick={(e) => {
+          e.preventDefault();
+          setIsModalOpen(true);
+        }}>
+          View Details
+        </a>
+      )
     }
   ], []);
 
@@ -135,10 +142,10 @@ function Transaction() {
 
           <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
             <TransactionForm
-              wallets={transactions.map(t => t.wallet).filter((w, i, self) => 
+              wallets={transactions.map(t => t.wallet).filter((w, i, self) =>
                 w && self.findIndex(t => t.id === w.id) === i
               )}
-              categories={transactions.map(t => t.category).filter((c, i, self) => 
+              categories={transactions.map(t => t.category).filter((c, i, self) =>
                 c && self.findIndex(t => t.id === c.id) === i
               )}
               onTransactionAdded={handleTransactionAdded}
