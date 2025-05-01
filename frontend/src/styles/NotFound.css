@@ -18,12 +18,3 @@
     margin-bottom: 2rem;
     object-fit: contain;
 }
-
-.bg-main-color-opacity-20 {
-    background-color: color-mix(in srgb, var(--green) 20%, transparent);
-}
-
-.full-page {
-    width: 100vw;
-    height: 100vh;
-}
