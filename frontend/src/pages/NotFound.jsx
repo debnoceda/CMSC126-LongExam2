@@ -8,7 +8,7 @@ function NotFound() {
     const navigate = useNavigate();
 
     return (
-        <div className="notfound-container">
+        <body className="notfound-container">
             <img src={ErrorImage} alt="404 Not Found" className="notfound-image" />
             <h2>The page you are looking for doesn't exist.</h2>
             <div className="notfound-button-wrapper">
@@ -19,7 +19,7 @@ function NotFound() {
                     className="bg-main-color white-color"
                 />
             </div>
-        </div>
+        </body>
     );
 }
 

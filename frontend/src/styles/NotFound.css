@@ -1,5 +1,6 @@
 .notfound-container {
     text-align: center;
+    background-color: color-mix(in srgb, var(--green) 20%, transparent);
 }
 
 .notfound-button-wrapper {
