@@ -15,12 +15,11 @@
 
 .modal-content {
     position: relative;
-    max-width: 500px;
-    width: 90%;
+    width: auto;
 }
 
 .modal-card {
-    padding: 2rem;
+    padding: 5rem;
 }
 
 .modal-header, .modal-footer {

@@ -1,0 +1,99 @@
+/* Basic styling for the button */
+.btn {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+     /* Space between icon and text */
+}
+
+/* Styling for the button icon */
+.large .btn-icon {
+    font-size: 6.25rem; /* Adjust size if necessary */
+}
+
+.small .btn-icon {
+    font-size: 3rem; /* Adjust size if necessary */
+}
+
+.large, .small {
+    border-radius: 2.5rem;
+    border: solid 0.125rem rgb(0, 0, 0, 0.5);
+}
+
+/* Large Button */
+.large {
+    width: 47.5rem;
+    padding: 2.5rem;
+    gap: 2rem;
+    font-size: 4rem;
+    font-weight: bold;
+    background-color: var(--green);
+    color: black;
+}
+
+.large:hover {
+    background-color: #5f8c1f;
+}
+
+/* Small Button */
+.small {
+    width: auto;
+    height: auto;
+    padding: 0.625rem 2.5rem;
+    gap: 1rem;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    background-color: var(--yellow);
+    color: black;
+}
+
+.small:hover {
+    background-color: #d99a3d;
+}
+
+/* Icon Only Button */
+.icon-only {
+    width: 5rem;
+    height: 5rem;
+    padding: 0;
+    border-radius: 50%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-only:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.icon-only .btn-icon {
+    font-size: 5rem;
+}
+
+/* Default Button */
+.default {
+    color: var(--green);
+    gap: 1rem;
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.default:hover {
+    color: #5f8c1f;
+    transform: scale(1.05);
+}
+
+.default .btn-icon {
+    font-size: 4rem;
+}
+
+/* Optional custom styling */
+.custom-style {
+    background-color: #6c757d;
+    color: white;
+}
