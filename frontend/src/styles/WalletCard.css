@@ -1,0 +1,72 @@
+.wallet-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem;
+    aspect-ratio: 5 / 3;
+    box-sizing: border-box;
+}
+
+.wallet-card:hover {
+    scale: 1;
+}
+
+.wallet-card-large {
+    height: 36rem;
+    cursor: default;
+}
+
+.wallet-card-small {
+    padding: 2rem;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: rgb(0,0,0,0.1);
+}
+
+.wallet-card-small:hover {
+    scale: 1.01;
+}
+
+.wallet-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.sim-image {
+    object-fit: contain;
+    border-radius: 0.5rem;
+    width: 6rem;
+    align-self: flex-start;
+}
+
+.wallet-card-small .wallet-balance {
+    font-size: 3rem;
+}
+
+.wallet-card-small .wallet-name {
+    font-size: 1.5rem;
+}
+
+.wallet-card-small .sim-image {
+    width: 4rem;
+}
+
+.add-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+@media (max-width: 500px) {
+    .wallet-card-small .wallet-balance {
+        font-size: 2rem;
+    }
+
+    .wallet-card-large {
+        width: 100%;
+        height: auto;
+    }
+}
