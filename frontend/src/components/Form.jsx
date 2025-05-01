@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import InputField from "./InputField";
 import "../styles/Form.css";
 
 function Form({route, method}) {
@@ -13,6 +14,7 @@ function Form({route, method}) {
     const [loading, setLoading] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [focusedField, setFocusedField] = useState(null);
     const navigate = useNavigate();
 
     const name = method === "login" ? "Login" : "Register";
@@ -78,41 +80,63 @@ function Form({route, method}) {
         }
     }
 
+    // Add handlers for focus and blur
+    const handleFocus = (fieldName) => {
+        setFocusedField(fieldName);
+    };
+
+    const handleBlur = () => {
+        setFocusedField(null);
+    };
+
     return (
         <form onSubmit={handleSubmit} className="form-container">
-            <h1>{name}</h1>
-            
             {method === "register" && (
                 <>
-                    <input
-                        className="form-name"
-                        type="text"
-                        placeholder="John"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        required
-                    />
-                    <input
-                        className="form-name"
-                        type="text"
-                        placeholder="Doe"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        required
-                    />
+                    <div className="name-container">
+                        <InputField
+                            label="First Name"
+                            className="form-input"
+                            type="text"
+                            placeholder="John"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            required
+                            status={focusedField === 'firstName' ? 'focused' : 'default'}
+                            onFocus={() => handleFocus('firstName')}
+                            onBlur={handleBlur}
+                        />
+                        <InputField
+                            label="Last Name"
+                            className="form-input"
+                            type="text"
+                            placeholder="Doe"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            required
+                            status={focusedField === 'lastName' ? 'focused' : 'default'}
+                            onFocus={() => handleFocus('lastName')}
+                            onBlur={handleBlur}
+                        />
+                    </div>
                 </>
             )}
 
-            <input
+            <InputField
+                label="Email"
                 className="form-input"
                 type="email"
                 placeholder="johndoe@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                status={focusedField === 'email' ? 'focused' : 'default'}
+                onFocus={() => handleFocus('email')}
+                onBlur={handleBlur}
             />
             <div className="password-container">
-                <input
+                <InputField
+                    label="Password"
                     className="form-input"
                     type="password"
                     placeholder="Password"
@@ -124,13 +148,22 @@ function Form({route, method}) {
                         }
                     }}
                     required
+                    status={passwordError ? 'error' : (focusedField === 'password' ? 'focused' : 'default')}
+                    onFocus={() => handleFocus('password')}
+                    onBlur={handleBlur}
+                    message={
+                        method === "register"
+                          ? (passwordError ? passwordError : "Must contain 1 uppercase, 1 number, min 8 characters")
+                          : ""
+                      }
+                      messageType={passwordError ? 'error' : 'info'}
                 />
-                {passwordError && <div className="error-message">{passwordError}</div>}
             </div>
 
             {method === "register" && (
                 <div className="password-container">
-                    <input
+                    <InputField
+                        label="Confirm Password"
                         className="form-input"
                         type="password"
                         placeholder="Confirm Password"
@@ -140,8 +173,12 @@ function Form({route, method}) {
                             validateConfirmPassword(password, e.target.value);
                         }}
                         required
+                        status={confirmPasswordError ? 'error' : (focusedField === 'confirmPassword' ? 'focused' : 'default')}
+                        onFocus={() => handleFocus('confirmPassword')}
+                        onBlur={handleBlur}
+                        message={confirmPasswordError || ''}
+                        messageType={confirmPasswordError ? 'error' : 'default'}
                     />
-                    {confirmPasswordError && <div className="error-message">{confirmPasswordError}</div>}
                 </div>
             )}
 
