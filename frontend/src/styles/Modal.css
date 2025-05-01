@@ -22,3 +22,10 @@
 .modal-card {
     padding: 2rem;
 }
+
+.modal-header, .modal-footer {
+    display: flex;
+    margin: 0;
+    justify-content: space-between;
+    align-items: center;
+}
