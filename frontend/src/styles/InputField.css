@@ -5,12 +5,13 @@
 
 .input-label {
     margin-bottom: 0.6rem;
+    font-size: 2.5rem;
 }
 
 /* Size variants */
 .input-element.small {
     padding: 1.2rem 2rem;
-    font-size: rem;
+    font-size: 2rem;
 }
 
 .input-element.medium {
@@ -20,7 +21,7 @@
 
 .input-element {
     border: 1px solid #ccc;
-    border-radius: 0.5rem;
+    border-radius: 2rem;
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
     transition: border-color 0.3s, box-shadow 0.3s;
@@ -41,4 +42,18 @@
 .input-element.error {
     border-color: #CE4645;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
+}
+
+.input-message-container{
+    display: flex;
+    align-items: center;
+    margin-top: 0.25rem;
+}
+
+.input-message {
+    margin-left: 0.25rem;
+}
+
+.input-message.error{
+    color: #CD3738;
 }
