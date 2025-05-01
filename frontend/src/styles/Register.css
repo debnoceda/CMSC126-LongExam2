@@ -25,3 +25,14 @@
     padding-bottom: 10rem;
 }
 
+.login-anchor{
+    font-size: 2.5rem;
+}
+
+.login-anchor a{
+    color: inherit;
+}
+
+.login-anchor a:hover, .login-anchor a:focus, .login-anchor a:active{
+    color:inherit;
+}

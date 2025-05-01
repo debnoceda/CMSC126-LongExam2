@@ -7,7 +7,7 @@ function Register(){
         <div className ="register-form-container">
             <h1>Create your Account</h1>
             <Form route="api/users/" method="register" />
-            <p>Already have an Account? <a href="/login">Login</a></p>
+            <p className="login-anchor">Already have an account? <a href="/login"><strong>Login</strong></a></p>
         </div>
         <img src={FroggyCheerCoin} alt="Froggy Cheer Coin"></img>
     </div>;
