@@ -62,6 +62,9 @@ body, header {
     padding: 0;
     font-family: 'Obviously', 'Poppins', Arial, sans-serif;
     background-color: white;
+}
+
+body {
     margin: 5rem;
 }
 
