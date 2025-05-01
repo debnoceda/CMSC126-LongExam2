@@ -1,6 +1,10 @@
 .balance-summary {
     position: relative;
     min-width: 400px;
+    height: 30rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .balance {
@@ -16,9 +20,9 @@
 
 .overlay-image {
     position: absolute;
-    right: 0px;
-    transform: translateY(-80%);
-    width: 210px;
+    right: 0;
+    transform: translateY(-15%);
+    width: 24rem;
     height: auto;
   }
 

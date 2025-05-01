@@ -57,8 +57,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    aspect-ratio: 5 / 3;
 }
 
+.wallet-card-container {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
 
 @media (max-width: 500px) {
     .wallet-card-small .wallet-balance {
