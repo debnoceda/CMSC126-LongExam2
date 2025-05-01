@@ -1,10 +1,16 @@
 import Form from "../components/Form"
 import { Link } from "react-router-dom"
+import "../styles/Login.css"
+import FroggyMain from "../assets/FroggyMain.png"
 
 function Login(){
-    return <div>
-        <Form route="/api/token/" method="login" />
-        <Link to="/register" className="nav-link">Register</Link>
+    return <div className="login-page">
+        <img src={FroggyMain} alt="Froggy Main"></img>
+        <div className="login-form-container">
+            <h1>Login</h1>
+            <Form route="/api/token/" method="login" />
+            <p className="register-anchor">Not registered yet? <a href="/register"><strong>Create an account</strong></a></p>
+        </div>
     </div>
 }
 
