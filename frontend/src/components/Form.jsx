@@ -3,6 +3,7 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import InputField from "./InputField";
+import Button from "./Button";
 import "../styles/Form.css";
 
 function Form({route, method}) {
@@ -22,7 +23,7 @@ function Form({route, method}) {
     const validatePassword = (password) => {
         const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
         if (!passwordRegex.test(password)) {
-            setPasswordError("Password must contain at least 1 uppercase letter, 1 number, and be minimum 8 characters");
+            setPasswordError("Must contain 1 uppercase, 1 number, and minimum of 8 characters");
             return false;
         }
         setPasswordError("");
@@ -153,7 +154,7 @@ function Form({route, method}) {
                     onBlur={handleBlur}
                     message={
                         method === "register"
-                          ? (passwordError ? passwordError : "Must contain 1 uppercase, 1 number, min 8 characters")
+                          ? (passwordError ? passwordError : "Must contain 1 uppercase, 1 number, and minimum of 8 characters")
                           : ""
                       }
                       messageType={passwordError ? 'error' : 'info'}
@@ -181,6 +182,7 @@ function Form({route, method}) {
                     />
                 </div>
             )}
+            <Button></Button>
 
             <button className="form-button" type="submit">
                 {name}
