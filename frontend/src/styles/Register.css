@@ -1,6 +1,6 @@
 .register-page{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
     height: 100vh;
     width: 100vw;
@@ -8,7 +8,7 @@
 }
 
 .register-form-container{
-    grid-column: span 2;
+    grid-column: span 3;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,6 +16,7 @@
 }
 
 .register-page img{
+    grid-column: span 2;
     width: 100%;
     justify-self: center;
     align-self: center;

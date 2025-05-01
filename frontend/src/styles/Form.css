@@ -1,5 +1,6 @@
 .name-container{
     display: flex;
+    gap: 5rem;
 }
 
 .form-input{
