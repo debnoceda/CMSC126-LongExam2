@@ -31,6 +31,10 @@
     border-color: #84AE26;
 }
 
+.rs-picker-popup {
+    z-index: 2000 !important;
+  }
+
 /* === Toggle Content === */
 .selected-date {
     font-weight: 500;
