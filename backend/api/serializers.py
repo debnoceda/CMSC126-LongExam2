@@ -4,54 +4,74 @@ from .models import Category, Wallet, Transaction, UserProfile
 
 class UserSerializer(serializers.ModelSerializer):
     monthly_budget = serializers.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    profile_picture = serializers.ImageField(source='profile.profile_picture', allow_null=True, required=False)
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'password', 'monthly_budget']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ['id', 'email', 'first_name', 'last_name', 'password', 'monthly_budget', 'profile_picture']
+        extra_kwargs = {
+            'password': {'write_only': True},
+        }
 
     def create(self, validated_data):
-        monthly_budget = validated_data.pop('monthly_budget', 0.00)
+        profile_data = validated_data.pop('profile', {})
+        monthly_budget = profile_data.get('monthly_budget', 0.00)
+        profile_picture = profile_data.get('profile_picture', None)
+
         email = validated_data.pop('email')
         password = validated_data.pop('password')
+
         user = User.objects.create_user(
             username=email,
             email=email,
             password=password,
             **validated_data
         )
-        UserProfile.objects.create(user=user, monthly_budget=monthly_budget)
+
+        UserProfile.objects.create(
+            user=user,
+            monthly_budget=monthly_budget,
+            profile_picture=profile_picture
+        )
+
         return user
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         ret['monthly_budget'] = instance.profile.monthly_budget
+        ret['profile_picture'] = instance.profile.profile_picture.url if instance.profile.profile_picture else None
         return ret
-    
+
     def update(self, instance, validated_data):
-        
-        monthly_budget = validated_data.pop('monthly_budget', None)
+        profile_data = validated_data.pop('profile', {})
+        monthly_budget = profile_data.get('monthly_budget')
+        profile_picture = profile_data.get('profile_picture')
+
         password = validated_data.pop('password', None)
         email = validated_data.pop('email', None)
+
         if email:
             instance.username = email
             instance.email = email
-        
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
+
         if password:
             instance.set_password(password)
-        
+
         instance.save()
 
         if monthly_budget is not None:
             instance.profile.monthly_budget = monthly_budget
-            instance.profile.save()
+
+        if profile_picture is not None:
+            instance.profile.profile_picture = profile_picture
+
+        instance.profile.save()
 
         return instance
 
-    
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
