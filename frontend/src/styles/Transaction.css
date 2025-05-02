@@ -1,14 +1,12 @@
 .transaction-wrapper {
   padding: 2.5rem;
   border-radius: 2.5rem;
-  background: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   min-height: 80vh;
   margin: 0 auto;
 }
 
 .transaction-header {
-  text-align: center;
   margin-bottom: 2rem;
 }
 
@@ -36,37 +34,16 @@
   background: #f1f1f1;
 }
 
-.transactions-table td:last-child a {
-  color: var(--green);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.transactions-table td:last-child a:hover {
-  text-decoration: underline;
-}
-
 .amount-positive {
   color: var(--green);
-  font-weight: 600;
 }
 
 .amount-negative {
   color: var(--red);
-  font-weight: 600;
 }
 
 .export-button-wrapper {
   display: flex;
   justify-content: flex-end;
   margin-top: 2rem;
-}
-
-.pagination-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
 }
