@@ -53,6 +53,7 @@ const Header = () => {
                     </button>
                     <button
                         className="header-btn profile"
+                        onClick={() => navigate("/profile")}
                         style={{
                             backgroundImage: userProfileImageUrl ? `url(${userProfileImageUrl})` : "none",
                             backgroundSize: "cover",
