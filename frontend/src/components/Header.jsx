@@ -1,13 +1,17 @@
-import React from "react";
-import "../styles/Header.css"; // Make sure you have a matching CSS file
+import React, { useState } from "react";
+import "../styles/Header.css";
 import { Icon } from "@iconify/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
+import Modal from "./Modal";
+import TransactionForm from "./TransactionForm";
 
 const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const isHome = location.pathname === "/home";
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const today = new Date().toLocaleDateString(undefined, {
         weekday: "long",
@@ -21,6 +25,9 @@ const Header = () => {
     const handleTitleClick = () => {
         if (!isHome) navigate("/home");
     };
+
+    const wallets = [{ id: 1, name: "Default Wallet" }];
+    const categories = [{ id: 1, name: "Food" }, { id: 2, name: "Transport" }];
 
     return (
         <header className="header">
@@ -38,8 +45,11 @@ const Header = () => {
                 )}
                 <NavigationBar />
                 <nav className="header-nav">
-                    <button className="header-btn addtransaction">
-                        <Icon icon="typcn:plus" className="icon" style={{ fontSize: "7rem"}}/>
+                    <button
+                        className="header-btn addtransaction"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <Icon icon="typcn:plus" className="icon" style={{ fontSize: "7rem" }} />
                     </button>
                     <button
                         className="header-btn profile"
@@ -52,6 +62,15 @@ const Header = () => {
                     ></button>
                 </nav>
             </div>
+
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+                <TransactionForm
+                    wallets={wallets}
+                    categories={categories}
+                    onTransactionAdded={() => setIsModalOpen(false)}
+                    onCancel={() => setIsModalOpen(false)}
+                />
+            </Modal>
         </header>
     );
 };
