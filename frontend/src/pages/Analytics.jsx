@@ -1,11 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Header from "../components/Header";
+import "../styles/Analytics.css";
+import ExpensesSummaryChart from '../components/ExpensesSummaryChart';
+import Dropdown from '../components/Dropdown';
+import IncomeVsExpensesChart from '../components/IncomeVsExpensesChart';
+import Button from '../components/Button';
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Analytics() {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth();
+
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+
+  const handleYearChange = (value) => setSelectedYear(value);
+  const handleMonthChange = (value) => setSelectedMonth(value);
+
+  const yearOptions = [2023, 2024, 2025];
+  const monthOptions = [
+    { label: 'Jan', value: 0 },
+    { label: 'Feb', value: 1 },
+    { label: 'Mar', value: 2 },
+    { label: 'Apr', value: 3 },
+    { label: 'May', value: 4 },
+    { label: 'Jun', value: 5 },
+    { label: 'Jul', value: 6 },
+    { label: 'Aug', value: 7 },
+    { label: 'Sep', value: 8 },
+    { label: 'Oct', value: 9 },
+    { label: 'Nov', value: 10 },
+    { label: 'Dec', value: 11 }
+  ];
+
+  // Find the object in monthOptions that matches the selectedMonth
+  const selectedMonthObj = monthOptions.find(m => m.value === selectedMonth);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
   return (
-    <div className="container">
-      <h1>Analytics</h1>
-      {/* Add your analytics content here */}
-    </div>
+    <>
+      <Header />
+      <div className="analytics-container">
+        <div className="card chart expenses-summary">
+          <h2 className='expenses-summary-title'>Expenses Summary</h2>
+          <div className='summary-date'>
+            <Dropdown
+              className='summary-date summary-year'
+              options={yearOptions}
+              selected={selectedYear}
+              onSelect={handleYearChange}
+              placeholder={selectedYear.toString()}
+            />
+            <Dropdown
+              options={monthOptions}
+              selected={selectedMonthObj}
+              onSelect={handleMonthChange}
+              placeholder={selectedMonthObj?.label}
+            />
+          </div>
+          <ExpensesSummaryChart
+            selectedYear={selectedYear}
+            selectedMonth={selectedMonth}
+          />
+        </div>
+
+        <div className="card chart income-vs-expenses">
+          <h2 className='income-vs-expenses'>Income vs Expenses</h2>
+          <IncomeVsExpensesChart />
+        </div>
+
+        <div className="card recent-transactions">
+          <div className='recent-transactions-header'>
+            <h2 className='recent-transactions-title'>Recent Transactions</h2>
+            <Button
+              type='small'
+              text={'View All'}
+              onClick={() => navigate('/transaction')}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

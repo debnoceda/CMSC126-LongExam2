@@ -1,15 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Icon } from "@iconify/react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/NavigationBar.css";
 
 const NavigationBar = () => {
     const [clicked, setClicked] = useState(null);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const refs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+
+    const pathToIndex = {
+        '/home': 0,
+        '/wallet': 1, // Assuming you have a /wallet route
+        '/transaction': 2,
+        '/analytics': 3,
+    };
+
+    useEffect(() => {
+        const currentIndex = pathToIndex[location.pathname];
+        setClicked(currentIndex !== undefined ? currentIndex : null);
+    }, [location.pathname]);
 
     const handleClick = (index) => {
         setClicked(index === clicked ? null : index);
+        // Navigation is already handled in the onClick of the div
     };
-
-    const refs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
     useEffect(() => {
         if (clicked !== null && refs[clicked]?.current) {
@@ -27,7 +42,7 @@ const NavigationBar = () => {
     return (
         <div className="navbar">
             {/* Home */}
-            <div className="nav-item" onClick={() => handleClick(0)}>
+            <div className="nav-item" onClick={() => { handleClick(0); navigate('/home'); }}>
                 <button className="nav-btn">
                     <Icon icon={clicked === 0 ? "material-symbols:home-rounded" : "material-symbols:home-outline-rounded"} className="icon" style={{ fontSize: "4.25rem" }} />
                 </button>
@@ -35,7 +50,7 @@ const NavigationBar = () => {
             </div>
 
             {/* Wallet */}
-            <div className="nav-item" onClick={() => handleClick(1)}>
+            <div className="nav-item" onClick={() => { handleClick(1); navigate('/wallet'); }}>
                 <button className={"nav-btn"}>
                     <Icon icon={clicked === 1 ? "fluent:wallet-credit-card-32-filled" : "fluent:wallet-credit-card-32-regular"} className="icon" style={{ stroke: "black", strokeWidth: 0.75 , fontSize: "4rem" }}/>
                 </button>
@@ -43,7 +58,7 @@ const NavigationBar = () => {
             </div>
 
             {/* Transactions */}
-            <div className="nav-item" onClick={() => handleClick(2)}>
+            <div className="nav-item" onClick={() => { handleClick(2); navigate('/transaction'); }}>
                 <button className={"nav-btn"}>
                     <Icon icon={clicked === 2 ? "icon-park-solid:transaction-order" : "icon-park-outline:transaction-order"} className="icon" style={{ fontSize: "4rem"}}/>
                 </button>
@@ -51,7 +66,7 @@ const NavigationBar = () => {
             </div>
 
             {/* Analytics */}
-            <div className="nav-item" onClick={() => handleClick(3)}>
+            <div className="nav-item" onClick={() => { handleClick(3); navigate('/analytics'); }}>
                 <button className={"nav-btn"}>
                     <Icon icon={clicked === 3 ? "material-symbols:analytics" : "material-symbols:analytics-outline"} className="icon" style={{ fontSize: "4.25rem"}}/>
                 </button>

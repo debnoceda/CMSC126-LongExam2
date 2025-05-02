@@ -1,35 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Icon } from "@iconify/react"; // Import the Icon component
-import "../styles/Dropdown.css"; // Link your custom styles here
+import { Icon } from "@iconify/react";
+import "../styles/Dropdown.css";
 
-/**
- * CustomDropdown Component
- *
- * Props:
- * - options: Array of option strings or objects
- * - onSelect: Function to call with selected value
- * - placeholder: Optional placeholder text
- * - className: Optional additional class names
- *
- * Usage:
- * <CustomDropdown
- *   options={['Option 1', 'Option 2']}
- *   onSelect={(value) => console.log(value)}
- *   placeholder="Select an option"
- * />
- *
- * Example:
- * const options = ['Apple', 'Banana', 'Cherry', 'Date']; // ✅ Define it
- * const handleSelect = (value) => {
- *      console.log('Selected:', value);
-    };
-
-    <Dropdown
-        options={options}
-        onSelect={handleSelect}
-        placeholder="Choose a fruit"
-    />
- */
 const Dropdown = ({
   options = [],
   onSelect,
@@ -41,8 +13,9 @@ const Dropdown = ({
   const dropdownRef = useRef(null);
 
   const handleSelect = (option) => {
+    const selectedValue = typeof option === 'object' ? option.value : option;
     setSelected(option);
-    onSelect && onSelect(option);
+    if (onSelect) onSelect(selectedValue);
     setIsOpen(false);
   };
 
@@ -57,13 +30,16 @@ const Dropdown = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const getLabel = (opt) => (typeof opt === 'object' ? opt.label : opt);
+  const displayValue = selected ? getLabel(selected) : placeholder;
+
   return (
     <div className={`custom-dropdown ${className}`} ref={dropdownRef}>
       <div
-        className={`dropdown-toggle ${isOpen ? "active" : ""}`} // Add 'active' class when open
+        className={`dropdown-toggle ${isOpen ? "active" : ""}`}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {selected || placeholder}
+        {displayValue}
         <span className="arrow">
           {isOpen ? (
             <Icon className="dropdown-arrow" icon="mdi:chevron-up" />
@@ -72,17 +48,25 @@ const Dropdown = ({
           )}
         </span>
       </div>
+
       {isOpen && (
         <ul className="dropdown-menu">
-          {options.map((opt, i) => (
-            <li
-              key={i}
-              onClick={() => handleSelect(opt)}
-              className={`dropdown-item ${opt === selected ? "selected" : ""}`} // Add 'selected' class if option is selected
-            >
-              {opt}
-            </li>
-          ))}
+          {options.map((opt, i) => {
+            const label = getLabel(opt);
+            const isSelected =
+              selected === opt ||
+              (typeof opt === "object" && selected?.value === opt.value);
+
+            return (
+              <li
+                key={i}
+                onClick={() => handleSelect(opt)}
+                className={`dropdown-item ${isSelected ? "selected" : ""}`}
+              >
+                {label}
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

@@ -4,10 +4,13 @@ import InputField from './InputField';
 import ModalHeader from './ModalHeader';
 import ModalFooter from './ModalFooter';
 import WalletCard from './WalletCard';
+import ConfirmAlert from './ConfirmAlert';
 
 function WalletForm({ wallet, onClose, onWalletUpdated }) {
     const [newWalletName, setNewWalletName] = useState(wallet?.name || "");
     const [newWalletBalance, setNewWalletBalance] = useState(wallet?.balance || "");
+    const [isDeleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [isUnsavedConfirmOpen, setUnsavedConfirmOpen] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,14 +42,6 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
     };
 
     const handleDelete = async () => {
-        if (!wallet) {
-            onClose();
-            return;
-        }
-
-        const confirmDelete = window.confirm(`Are you sure you want to delete the wallet "${wallet.name}"?`);
-        if (!confirmDelete) return;
-
         try {
             await api.delete(`/api/wallets/${wallet.id}/`);
             alert("Wallet deleted successfully!");
@@ -61,10 +56,10 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
     const handleClose = () => {
         const hasChanges = newWalletName !== wallet?.name || newWalletBalance !== wallet?.balance;
         if (hasChanges) {
-            const confirmClose = window.confirm("You have unsaved changes. Are you sure you want to close?");
-            if (!confirmClose) return;
+            setUnsavedConfirmOpen(true); // Open unsaved changes confirmation
+        } else {
+            onClose();
         }
-        onClose();
     };
 
     return (
@@ -101,10 +96,38 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                 />
             </form>
             <ModalFooter
-                onDelete={wallet ? handleDelete : null} // Only show delete button if editing
+                onDelete={wallet ? () => setDeleteConfirmOpen(true) : onClose}
                 onAction={handleSubmit}
                 actionTitle={wallet ? "Update" : "Add"}
             />
+            {/* ConfirmAlert for delete confirmation */}
+            <ConfirmAlert
+                isOpen={isDeleteConfirmOpen}
+                title="Confirm Delete"
+                mainActionTitle="Delete"
+                secondActionTitle="Cancel"
+                onMainAction={() => {
+                    setDeleteConfirmOpen(false);
+                    handleDelete();
+                }}
+                onSecondAction={() => setDeleteConfirmOpen(false)}
+            >
+                Are you sure you want to delete the wallet "{wallet?.name}"?
+            </ConfirmAlert>
+            {/* ConfirmAlert for unsaved changes */}
+            <ConfirmAlert
+                isOpen={isUnsavedConfirmOpen}
+                title="Unsaved Changes"
+                mainActionTitle="Discard"
+                secondActionTitle="Cancel"
+                onMainAction={() => {
+                    setUnsavedConfirmOpen(false);
+                    onClose();
+                }}
+                onSecondAction={() => setUnsavedConfirmOpen(false)}
+            >
+                You have unsaved changes. Are you sure you want to close?
+            </ConfirmAlert>
         </div>
     );
 }
