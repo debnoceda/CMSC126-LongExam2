@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
+import { useTable, useSortBy } from 'react-table';
 import '../styles/Transaction.css';
 
-const Table = ({ transactions, onViewDetails, onExport }) => {
+const Table = ({ transactions, onViewDetails }) => {
   const columns = useMemo(() => [
     { Header: 'Title', accessor: 'title' },
     { Header: 'Date', accessor: 'date' },
@@ -43,49 +43,43 @@ const Table = ({ transactions, onViewDetails, onExport }) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    page,
-    prepareRow,
-    nextPage,
-    previousPage,
-    canNextPage,
-    canPreviousPage,
-    pageOptions,
-    state: { pageIndex },
-  } = useTable({ columns, data: useMemo(() => transactions, [transactions]), initialState: { pageSize: 5 } }, useSortBy, usePagination);
+    rows,
+    prepareRow
+  } = useTable(
+    { columns, data: useMemo(() => transactions, [transactions]) },
+    useSortBy
+  );
 
   return (
-    <>
-      <table {...getTableProps()} className="transactions-table">
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  <h3>
-                    {column.render('Header')}
-                    <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
-                  </h3>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map(row => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => (
-                  <td {...cell.getCellProps()}>
-                    <p>{cell.render('Cell')}</p>
-                  </td>
+    <div className="scrollable-table-wrapper">
+        <table {...getTableProps()} className="transactions-table">
+            <thead>
+            {headerGroups.map(headerGroup => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                        <h3>{column.render('Header')}</h3>
+                    </th>
                 ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </>
+                </tr>
+            ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+            {rows.map(row => {
+                prepareRow(row);
+                return (
+                <tr {...row.getRowProps()}>
+                    {row.cells.map(cell => (
+                    <td {...cell.getCellProps()}>
+                        <p>{cell.render('Cell')}</p>
+                    </td>
+                    ))}
+                </tr>
+                );
+            })}
+            </tbody>
+        </table>
+    </div>
   );
 };
 
