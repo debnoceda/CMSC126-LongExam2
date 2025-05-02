@@ -10,4 +10,5 @@ router.register(r'users', views.UserViewSet, basename='user')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('api/income-vs-expenses/', views.TransactionViewSet.as_view({'get': 'get_income_vs_expenses'}), name='income-vs-expenses'),
 ]
