@@ -1,0 +1,20 @@
+.notfound-container {
+    text-align: center;
+    background-color: color-mix(in srgb, var(--green) 20%, transparent);
+}
+
+.notfound-button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.notfound-image {
+    max-width: 70vw;
+    max-height: 70vh;
+    height: auto;
+    width: auto;
+    align-items: center;
+    margin-bottom: 2rem;
+    object-fit: contain;
+}

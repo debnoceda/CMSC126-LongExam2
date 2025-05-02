@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from "@iconify-icon/react";
+import { Icon } from "@iconify/react";
 
 function ModalHeader({ title, onClose }) {
     return (

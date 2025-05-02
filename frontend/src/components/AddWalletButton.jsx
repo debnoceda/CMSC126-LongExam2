@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "@iconify-icon/react";
+import { Icon } from "@iconify/react";
 import "../styles/WalletCard.css";
 
 function AddWalletButton({ onClick }) {
