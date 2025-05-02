@@ -11,7 +11,7 @@ const NavigationBar = () => {
 
     const pathToIndex = {
         '/home': 0,
-        '/wallet': 1, // Assuming you have a /wallet route
+        '/wallets': 1,
         '/transaction': 2,
         '/analytics': 3,
     };
@@ -50,7 +50,7 @@ const NavigationBar = () => {
             </div>
 
             {/* Wallet */}
-            <div className="nav-item" onClick={() => { handleClick(1); navigate('/wallet'); }}>
+            <div className="nav-item" onClick={() => { handleClick(1); navigate('/wallets'); }}>
                 <button className={"nav-btn"}>
                     <Icon icon={clicked === 1 ? "fluent:wallet-credit-card-32-filled" : "fluent:wallet-credit-card-32-regular"} className="icon" style={{ stroke: "black", strokeWidth: 0.75 , fontSize: "4rem" }}/>
                 </button>
