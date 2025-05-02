@@ -106,3 +106,28 @@
 .text-button .btn-icon {
     font-size: 4rem;
 }
+
+.toggle-buttons {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.toggle-buttons .text-button {
+    flex: 1;
+    text-align: center;
+    padding: 1.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 1.25rem;
+    font-size: 2rem;
+    background-color: white;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-buttons .text-button.active {
+    border: 0.25rem solid var(--green);
+    background-color: #f0f8e7;
+    color: var(--green);
+    font-weight: bold;
+}
