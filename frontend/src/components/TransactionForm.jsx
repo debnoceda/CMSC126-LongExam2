@@ -19,19 +19,35 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
     const [showUnsavedAlert, setShowUnsavedAlert] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
+    const [walletList, setWalletList] = useState(wallets);
+    const [categoryList, setCategoryList] = useState(categories);
 
     useEffect(() => {
         if (initialData) {
+            console.log('Initial Transaction Data:', initialData);
+            
+            // Set basic transaction data
             setTransactionTitle(initialData.title || "");
             setTransactionAmount(initialData.amount || "");
             setTransactionType(initialData.transaction_type || "expense");
             setTransactionDate(initialData.date || new Date().toISOString().split('T')[0]);
             setTransactionNotes(initialData.notes || "");
-            setTransactionCategoryId(initialData.category?.id || "");
-            setTransactionWalletId(initialData.wallet?.id || wallets[0]?.id || "");
+
+            // Set wallet and category IDs
+            if (initialData.wallet) {
+                console.log('Setting Wallet:', initialData.wallet);
+                setTransactionWalletId(initialData.wallet.id);
+            }
+
+            // Only set category if it's an expense and has a category
+            if (initialData.transaction_type === "expense" && initialData.category) {
+                console.log('Setting Category:', initialData.category);
+                setTransactionCategoryId(initialData.category.id);
+            }
+
             setIsDirty(false);
         }
-    }, [initialData, wallets]);
+    }, [initialData]);
 
     useEffect(() => {
         const beforeUnloadHandler = (e) => {
@@ -43,6 +59,31 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
         window.addEventListener('beforeunload', beforeUnloadHandler);
         return () => window.removeEventListener('beforeunload', beforeUnloadHandler);
     }, [isDirty]);
+
+    // Fetch wallets and categories on mount
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [walletRes, categoryRes] = await Promise.all([
+                    api.get('/api/wallets/'),
+                    api.get('/api/categories/'),
+                ]);
+
+                setWalletList(walletRes.data);
+                setCategoryList(categoryRes.data);
+
+                // Only set default wallet if this is a new transaction
+                if (!initialData) {
+                    setTransactionWalletId(walletRes.data[0]?.id || "");
+                }
+            } catch (error) {
+                console.error("Error fetching wallets or categories:", error);
+                alert("Failed to fetch wallet or category data.");
+            }
+        };
+
+        fetchData();
+    }, [initialData]);
 
     const markDirty = () => setIsDirty(true);
 
@@ -158,10 +199,18 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
             <div className="form-group">
                 <p>Wallet*</p>
                 <CustomDropdown
-                    options={wallets.map(wallet => ({ label: wallet.name, value: wallet.id }))}
+                    options={walletList.map(wallet => ({
+                        label: wallet.name,
+                        value: wallet.id
+                    }))}
                     selectedValue={transactionWalletId}
-                    onSelect={(value) => { setTransactionWalletId(value); markDirty(); }}
+                    onSelect={(value) => {
+                        console.log('Selected Wallet:', value);
+                        setTransactionWalletId(value);
+                        markDirty();
+                    }}
                     placeholder="Select Wallet"
+                    defaultValue={walletList.find(w => w.id === transactionWalletId)?.name || "Select Wallet"}
                 />
             </div>
 
@@ -169,10 +218,18 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
                 <div className="form-group">
                     <p>Category *</p>
                     <CustomDropdown
-                        options={categories.map(cat => ({ label: cat.name, value: cat.id }))}
+                        options={categoryList.map(cat => ({
+                            label: cat.name,
+                            value: cat.id
+                        }))}
                         selectedValue={transactionCategoryId}
-                        onSelect={(value) => { setTransactionCategoryId(value); markDirty(); }}
+                        onSelect={(value) => {
+                            console.log('Selected Category:', value);
+                            setTransactionCategoryId(value);
+                            markDirty();
+                        }}
                         placeholder="Select Category"
+                        value={categoryList.find(c => c.id === transactionCategoryId)?.name}
                     />
                 </div>
             )}
