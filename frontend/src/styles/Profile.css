@@ -1,0 +1,88 @@
+.profile-page{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 2fr;
+}
+
+.header{
+    grid-column: span 5;
+}
+
+.profile-picture-section{
+    grid-column: span 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.personal-info-section{
+    grid-column: span 3;
+    display: flex;
+    flex-direction: column;
+    padding: 5rem;
+
+    border: 1px solid #ccc;
+    border-radius: 2rem;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+}
+
+.title-button-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4rem;
+}
+
+.title-button-container h2{
+    font-size: 4rem;
+    font-weight: 600;
+}
+
+.user-name{
+    display: flex;
+    align-items: center;
+    gap: 40rem;
+}
+
+.info-item{
+    display:flex;
+    flex-direction: column;
+    margin-bottom: 4rem;
+}
+
+.info-item label{
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.info-item p{
+    font-size: 3.5rem;
+    font-weight: 500;
+}
+
+.separator {
+    grid-column: 1 / -1;
+    height: 1px;
+    background-color: #000000;
+    margin: 1rem 0;
+}
+
+.info-item-monthly-budget{
+    margin-top: 4rem;
+}
+
+.info-item-monthly-budget h2{
+    font-size: 4rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.info-item-monthly-budget h1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+}
