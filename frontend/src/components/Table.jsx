@@ -24,18 +24,18 @@ const Table = ({ transactions, onViewDetails }) => {
       )
     },
     {
-      Header: 'Action',
-      accessor: 'id',
-      Cell: () => (
-        <p>
-          <a href="#" onClick={(e) => {
-            e.preventDefault();
-            onViewDetails();
-          }}>
-            View Details
-          </a>
-        </p>
-      )
+        Header: 'Action',
+        accessor: 'id',
+        Cell: ({ row }) => (
+            <p>
+            <a href="#" onClick={(e) => {
+                e.preventDefault();
+                onViewDetails(row.original.id);
+            }}>
+                View Details
+            </a>
+            </p>
+        )
     }
   ], [onViewDetails]);
 
