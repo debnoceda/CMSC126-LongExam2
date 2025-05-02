@@ -206,7 +206,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
             <ModalFooter
                 onAction={handlePreSubmit}
                 onDelete={() => initialData ? setShowDeleteAlert(true) : handleCancel()}
-                actionTitle={initialData ? "Update Transaction" : "Done"}
+                actionTitle={initialData ? "Update" : "Add"}
             />
             <ConfirmAlert
                 isOpen={showConfirm}
