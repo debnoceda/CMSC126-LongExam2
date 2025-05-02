@@ -10,22 +10,41 @@ import '../styles/Transaction.css';
 function Transaction() {
   const [transactions, setTransactions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await api.get('/api/transactions/');
-        setTransactions(response.data);
-      } catch (error) {
-        console.error('Error fetching transactions:', error);
-      }
-    };
-    fetchData();
+    fetchTransactions();
   }, []);
 
-  const handleTransactionAdded = (newTransaction) => {
-    setTransactions(prev => [newTransaction, ...prev]);
+  const fetchTransactions = async () => {
+    try {
+      const response = await api.get('/api/transactions/');
+      setTransactions(response.data);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+    }
+  };
+
+  const handleAddClick = () => {
+    setSelectedTransaction(null); // For adding new transaction
+    setIsModalOpen(true);
+  };
+
+  const handleViewDetails = async (transactionId) => {
+    try {
+      const response = await api.get(`/api/transactions/${transactionId}/`);
+      setSelectedTransaction(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Failed to fetch transaction:", error);
+      alert("Could not fetch transaction details.");
+    }
+  };
+
+  const handleTransactionAdded = (newOrUpdatedTransaction) => {
     setIsModalOpen(false);
+    setSelectedTransaction(null);
+    fetchTransactions(); // refresh transaction list
   };
 
   const exportToCSV = () => {
@@ -50,12 +69,12 @@ function Transaction() {
 
   return (
     <>
-      <Header onAddTransaction={() => setIsModalOpen(true)} />
+      <Header onAddTransaction={handleAddClick} />
       <div className="transaction-wrapper">
         <div className="container">
           <h2 className="transaction-header">Transactions</h2>
 
-          <Table transactions={transactions} onViewDetails={() => setIsModalOpen(true)} />
+          <Table transactions={transactions} onViewDetails={handleViewDetails} />
 
           <div className="export-button-wrapper">
             <Button
@@ -65,8 +84,12 @@ function Transaction() {
             />
           </div>
 
-          <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <Modal isOpen={isModalOpen} onClose={() => {
+            setIsModalOpen(false);
+            setSelectedTransaction(null);
+          }}>
             <TransactionForm
+              initialData={selectedTransaction}
               wallets={transactions.map(t => t.wallet).filter((w, i, self) =>
                 w && self.findIndex(t => t.id === w.id) === i
               )}
@@ -74,7 +97,10 @@ function Transaction() {
                 c && self.findIndex(t => t.id === c.id) === i
               )}
               onTransactionAdded={handleTransactionAdded}
-              onCancel={() => setIsModalOpen(false)}
+              onCancel={() => {
+                setIsModalOpen(false);
+                setSelectedTransaction(null);
+              }}
             />
           </Modal>
         </div>
