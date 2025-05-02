@@ -27,8 +27,8 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
             setTransactionType(initialData.transaction_type || "expense");
             setTransactionDate(initialData.date || new Date().toISOString().split('T')[0]);
             setTransactionNotes(initialData.notes || "");
-            setTransactionCategoryId(initialData.category_id || "");
-            setTransactionWalletId(initialData.wallet_id || wallets[0]?.id || "");
+            setTransactionCategoryId(initialData.category?.id || "");
+            setTransactionWalletId(initialData.wallet?.id || wallets[0]?.id || "");
             setIsDirty(false);
         }
     }, [initialData, wallets]);
