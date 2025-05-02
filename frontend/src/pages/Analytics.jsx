@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from "../components/Header";
 import "../styles/Analytics.css";
 import ExpensesSummaryChart from '../components/ExpensesSummaryChart';
@@ -7,12 +7,21 @@ import IncomeVsExpensesChart from '../components/IncomeVsExpensesChart';
 import Button from '../components/Button';
 import { useLocation, useNavigate } from "react-router-dom";
 
+import Table from '../components/Table';
+import Modal from '../components/Modal';
+import TransactionForm from '../components/TransactionForm';
+import api from '../api';
+
 function Analytics() {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
 
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+
+  const [transactions, setTransactions] = useState([]);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleYearChange = (value) => setSelectedYear(value);
   const handleMonthChange = (value) => setSelectedMonth(value);
@@ -33,11 +42,38 @@ function Analytics() {
     { label: 'Dec', value: 11 }
   ];
 
-  // Find the object in monthOptions that matches the selectedMonth
   const selectedMonthObj = monthOptions.find(m => m.value === selectedMonth);
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await api.get('/api/transactions/');
+        setTransactions(response.data);
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      }
+    };
+    fetchTransactions();
+  }, []);
+
+  const handleViewDetails = async (id) => {
+    try {
+      const response = await api.get(`/api/transactions/${id}/`);
+      setSelectedTransaction(response.data);
+      setIsModalOpen(true);
+    } catch (error) {
+      alert("Could not fetch transaction details.");
+    }
+  };
+
+  const handleTransactionAdded = () => {
+    setIsModalOpen(false);
+    setSelectedTransaction(null);
+    api.get('/api/transactions/').then(res => setTransactions(res.data));
+  };
 
   return (
     <>
@@ -80,8 +116,37 @@ function Analytics() {
               onClick={() => navigate('/transaction')}
             />
           </div>
+          <Table
+            transactions={
+              [...transactions]
+                .filter(tx => tx?.date)
+                .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) //need iupdate ang datetime kay muequal sya if same date ;-;
+                .slice(0, 3)
+            }
+            onViewDetails={handleViewDetails}
+          />
         </div>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={() => {
+        setIsModalOpen(false);
+        setSelectedTransaction(null);
+      }}>
+        <TransactionForm
+          initialData={selectedTransaction}
+          wallets={transactions.map(t => t.wallet).filter((w, i, self) =>
+            w && self.findIndex(t => t.id === w.id) === i
+          )}
+          categories={transactions.map(t => t.category).filter((c, i, self) =>
+            c && self.findIndex(t => t.id === c.id) === i
+          )}
+          onTransactionAdded={handleTransactionAdded}
+          onCancel={() => {
+            setIsModalOpen(false);
+            setSelectedTransaction(null);
+          }}
+        />
+      </Modal>
     </>
   );
 }
