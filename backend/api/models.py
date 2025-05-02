@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
 
 def get_default_profile_picture():
     return 'default/Progil.png'
