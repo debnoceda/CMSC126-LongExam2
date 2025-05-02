@@ -16,7 +16,6 @@ function NotFound() {
                     type="small"
                     text="Go to Home"
                     onClick={() => navigate('/home')}
-                    className="bg-main-color white-color"
                 />
             </div>
         </body>
