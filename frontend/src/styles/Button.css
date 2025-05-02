@@ -127,7 +127,7 @@
 
 .toggle-buttons .text-button.active {
     border: 0.25rem solid var(--green);
-    background-color: #f0f8e7;
-    color: var(--green);
+    background-color: var(--green);
+    color: white;
     font-weight: bold;
 }

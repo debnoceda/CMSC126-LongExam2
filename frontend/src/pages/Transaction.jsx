@@ -26,7 +26,7 @@ function Transaction() {
   };
 
   const handleAddClick = () => {
-    setSelectedTransaction(null); // For adding new transaction
+    setSelectedTransaction(null);
     setIsModalOpen(true);
   };
 
@@ -44,7 +44,7 @@ function Transaction() {
   const handleTransactionAdded = (newOrUpdatedTransaction) => {
     setIsModalOpen(false);
     setSelectedTransaction(null);
-    fetchTransactions(); // refresh transaction list
+    fetchTransactions();
   };
 
   const exportToCSV = () => {

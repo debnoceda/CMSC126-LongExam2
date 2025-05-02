@@ -4,7 +4,6 @@ import ModalHeader from './ModalHeader';
 import ModalFooter from './ModalFooter';
 import ConfirmAlert from './ConfirmAlert';
 import InputField from './InputField';
-import Button from './Button';
 import CustomDropdown from './Dropdown';
 import CustomDatepicker from './DatePicker';
 
@@ -20,7 +19,6 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
     const [showUnsavedAlert, setShowUnsavedAlert] = useState(false);
     const [showDeleteAlert, setShowDeleteAlert] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
-    const [deleteSuccess, setDeleteSuccess] = useState(false);
 
     useEffect(() => {
         if (initialData) {
@@ -84,11 +82,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
         if (!initialData?.id) return;
         try {
             await api.delete(`/api/transactions/${initialData.id}/`);
-            setDeleteSuccess(true);
-            setTimeout(() => {
-                setDeleteSuccess(false);
-                onTransactionAdded(null);
-            }, 1500);
+            onTransactionAdded(null); // treat as deleted
         } catch (error) {
             console.error("Error deleting transaction:", error);
             alert("Failed to delete transaction. Please try again.");
@@ -119,64 +113,72 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
     };
 
     return (
-        <>
+        <div className="modal-content">
             <ModalHeader title={initialData ? "Edit Transaction" : "New Transaction"} onClose={handleCancel} />
-            <form onSubmit={handlePreSubmit} className="form-container">
-                <div className="toggle-buttons">
-                    <button
-                        type="button"
-                        className={`toggle-button ${transactionType === 'income' ? 'active' : ''}`}
-                        onClick={() => { setTransactionType('income'); markDirty(); }}
-                    >
-                        Income
-                    </button>
-                    <button
-                        type="button"
-                        className={`toggle-button ${transactionType === 'expense' ? 'active' : ''}`}
-                        onClick={() => { setTransactionType('expense'); markDirty(); }}
-                    >
-                        Expense
-                    </button>
-                </div>
+            <form onSubmit={handlePreSubmit}>
+            <div className="toggle-buttons">
+                <button
+                    type="button"
+                    className={`text-button ${transactionType === 'income' ? 'active' : ''}`}
+                    onClick={() => { setTransactionType('income'); markDirty(); }}
+                >
+                    <p>Income</p>
+                </button>
+                <button
+                    type="button"
+                    className={`text-button ${transactionType === 'expense' ? 'active' : ''}`}
+                    onClick={() => { setTransactionType('expense'); markDirty(); }}
+                >
+                    <p>Expense</p>
+                </button>
+            </div>
 
-                <InputField
-                    label="Title *"
-                    type="text"
-                    value={transactionTitle}
-                    onChange={(e) => { setTransactionTitle(e.target.value); markDirty(); }}
-                    placeholder="Add title"
-                    required
-                />
-                <InputField
-                    label="Add amount *"
-                    type="number"
-                    value={transactionAmount}
-                    onChange={(e) => { setTransactionAmount(e.target.value); markDirty(); }}
-                    placeholder="000,000"
-                    required
-                />
+            <p>Title*</p>
+            <InputField
+                type="text"
+                placeholder="Add Title"
+                value={transactionTitle}
+                onChange={(e) => { setTransactionTitle(e.target.value); markDirty(); }}
+                required
+                className="form-group"
+                variant="small"
+            />
 
-                <label>Wallet *</label>
+            <p>Amount*</p>
+            <InputField
+                placeholder="000,000"
+                type="number"
+                value={transactionAmount}
+                onChange={(e) => { setTransactionAmount(e.target.value); markDirty(); }}
+                required
+                className="form-group"
+                variant="small"
+            />
+
+            <div className="form-group">
+                <p>Wallet*</p>
                 <CustomDropdown
                     options={wallets.map(wallet => ({ label: wallet.name, value: wallet.id }))}
                     selectedValue={transactionWalletId}
                     onSelect={(value) => { setTransactionWalletId(value); markDirty(); }}
                     placeholder="Select Wallet"
                 />
+            </div>
 
-                {transactionType === "expense" && (
-                    <>
-                        <label>Category *</label>
-                        <CustomDropdown
-                            options={categories.map(cat => ({ label: cat.name, value: cat.id }))}
-                            selectedValue={transactionCategoryId}
-                            onSelect={(value) => { setTransactionCategoryId(value); markDirty(); }}
-                            placeholder="Select Category"
-                        />
-                    </>
-                )}
+            {transactionType === "expense" && (
+                <div className="form-group">
+                    <p>Category *</p>
+                    <CustomDropdown
+                        options={categories.map(cat => ({ label: cat.name, value: cat.id }))}
+                        selectedValue={transactionCategoryId}
+                        onSelect={(value) => { setTransactionCategoryId(value); markDirty(); }}
+                        placeholder="Select Category"
+                    />
+                </div>
+            )}
 
-                <label>Date</label>
+            <div className="form-group">
+                <p>Date</p>
                 <CustomDatepicker
                     selectedDate={transactionDate}
                     onChange={(date) => {
@@ -186,14 +188,20 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
                         }
                     }}
                 />
+            </div>
 
+            <div className="form-group">
+                <p>Notes</p>
                 <InputField
-                    label="Notes"
                     type="text"
                     value={transactionNotes}
                     onChange={(e) => { setTransactionNotes(e.target.value); markDirty(); }}
                     placeholder="Add a note"
+                    className="form-group"
+                    variant="small"
                 />
+            </div>
+
             </form>
             <ModalFooter
                 onAction={handlePreSubmit}
@@ -203,7 +211,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
             <ConfirmAlert
                 isOpen={showConfirm}
                 title={initialData ? "Confirm Update" : "Confirm Transaction"}
-                mainActionTitle={initialData ? "Yes, Update" : "Yes, Add"}
+                mainActionTitle={initialData ? "Update" : "Add"}
                 secondActionTitle="Cancel"
                 onMainAction={handleSubmit}
                 onSecondAction={() => setShowConfirm(false)}
@@ -215,20 +223,12 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
             <ConfirmAlert
                 isOpen={showDeleteAlert}
                 title="Delete Transaction"
-                mainActionTitle="Yes, Delete"
+                mainActionTitle="Delete"
                 secondActionTitle="Cancel"
                 onMainAction={handleDelete}
                 onSecondAction={() => setShowDeleteAlert(false)}
             >
                 Are you sure you want to delete this transaction?
-            </ConfirmAlert>
-            <ConfirmAlert
-                isOpen={deleteSuccess}
-                title="Deleted"
-                mainActionTitle="Close"
-                onMainAction={() => setDeleteSuccess(false)}
-            >
-                Transaction successfully deleted.
             </ConfirmAlert>
             <ConfirmAlert
                 isOpen={showUnsavedAlert}
@@ -240,7 +240,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
             >
                 You have unsaved changes. Are you sure you want to leave?
             </ConfirmAlert>
-        </>
+        </div>
     );
 }
 

@@ -84,3 +84,7 @@ input:focus {
 .input-message.error{
     color: #CD3738;
 }
+
+.form-group {
+    margin-bottom: 4rem;
+}
