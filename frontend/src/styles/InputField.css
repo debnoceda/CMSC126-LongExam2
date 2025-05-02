@@ -22,7 +22,7 @@
 .input-element {
     box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 2rem;
+    border-radius: 1.25rem;
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
     transition: border-color 0.3s, box-shadow 0.3s;

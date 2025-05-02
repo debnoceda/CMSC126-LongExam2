@@ -77,16 +77,30 @@
 
 /* Default Button */
 .text-button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--green);
     gap: 1rem;
     font-size: 3rem;
-    font-weight: bold;
     margin: 0;
+    padding: 1rem 1rem;
+    border-radius: 5rem;
+    border: 0.2rem solid var(--green);
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .text-button:hover {
+    background-color: rgba(132, 174, 38, 0.1);
     color: #5f8c1f;
     transform: scale(1.05);
+}
+
+.text-button.active {
+    background-color: var(--green);
+    color: white;
 }
 
 .text-button .btn-icon {
