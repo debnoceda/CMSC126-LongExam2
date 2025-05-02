@@ -4,20 +4,20 @@
   background: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   min-height: 80vh;
+  margin: 0 auto;
 }
 
 .transaction-header {
-  font-size: 3rem;
-  font-weight: bold;
+  text-align: center;
   margin-bottom: 2rem;
 }
 
 .transactions-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 2.5rem;
+  border-radius: 2rem;
   overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .transactions-table th,
@@ -29,7 +29,6 @@
 
 .transactions-table th {
   background: #f9f9f9;
-  font-weight: bold;
   cursor: pointer;
 }
 
@@ -39,7 +38,7 @@
 
 .transactions-table td:last-child a {
   color: var(--green);
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
 }
 
@@ -57,34 +56,10 @@
   font-weight: 600;
 }
 
-.form-button,
-.export-button {
-  border: none;
-  border-radius: 999px;
-  padding: 1rem 2rem;
-  font-size: 1.6rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.form-button {
-  background: var(--green);
-  color: #fff;
-}
-
-.form-button:hover {
-  background: #729421;
-}
-
-.export-button {
-  background: var(--yellow);
-  color: #000;
-  font-size: 1.4rem;
-}
-
-.export-button:hover {
-  background: #e6a540;
+.export-button-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
 }
 
 .pagination-controls {
@@ -92,4 +67,6 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
