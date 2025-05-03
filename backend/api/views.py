@@ -81,7 +81,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
         instance.wallet.save()
         instance.delete()
 
-    def get_income_vs_expenses(request):
+    @action(detail=False, methods=['get'], url_path='income_vs_expenses')
+    def income_vs_expenses(self, request):
         current_year = date.today().year
 
         transactions = Transaction.objects.filter(date__year=current_year)
