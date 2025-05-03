@@ -47,6 +47,15 @@ function Analytics() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const monthlyFilteredTransactions = transactions.filter(tx => {
+    if (!tx?.date) return false;
+    const txDate = new Date(tx.date);
+    return (
+      txDate.getFullYear() === selectedYear &&
+      txDate.getMonth() === selectedMonth
+    );
+  });
+
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -83,7 +92,6 @@ function Analytics() {
           <h2 className='expenses-summary-title'>Expenses Summary</h2>
           <div className='summary-date'>
             <Dropdown
-              className='summary-date summary-year'
               options={yearOptions}
               selected={selectedYear}
               onSelect={handleYearChange}
@@ -96,10 +104,15 @@ function Analytics() {
               placeholder={selectedMonthObj?.label}
             />
           </div>
-          <ExpensesSummaryChart
-            selectedYear={selectedYear}
-            selectedMonth={selectedMonth}
-          />
+          {monthlyFilteredTransactions.length === 0 ? (
+            <p className='no-data'>No data found</p>
+          ) : (
+            <ExpensesSummaryChart
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
+              transactions={monthlyFilteredTransactions}
+            />
+          )}
         </div>
 
         <div className="card chart income-vs-expenses">
@@ -121,7 +134,7 @@ function Analytics() {
               [...transactions]
                 .filter(tx => tx?.date)
                 .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) //need iupdate ang datetime kay muequal sya if same date ;-;
-                .slice(0, 3)
+                .slice(0, 5)
             }
             onViewDetails={handleViewDetails}
           />
