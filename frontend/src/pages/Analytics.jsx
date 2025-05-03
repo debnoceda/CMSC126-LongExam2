@@ -116,12 +116,12 @@ function Analytics() {
           )}
         </Card>
 
-        <div className="card chart income-vs-expenses">
+        <Card className="chart income-vs-expenses">
           <h2 className='income-vs-expenses'>Income vs Expenses</h2>
           <IncomeVsExpensesChart />
-        </div>
+        </Card>
 
-        <div className="card recent-transactions">
+        <Card className="card recent-transactions">
           <div className='recent-transactions-header'>
             <h2 className='recent-transactions-title'>Recent Transactions</h2>
             <Button
@@ -139,7 +139,7 @@ function Analytics() {
             }
             onViewDetails={handleViewDetails}
           />
-        </div>
+        </Card>
       </div>
 
       <Modal isOpen={isModalOpen} onClose={() => {

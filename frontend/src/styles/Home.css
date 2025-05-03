@@ -1,13 +1,27 @@
+.home-wrapper {
+    min-height: calc(100vh - 10rem);
+}
 .home-container {
     display: grid;
     grid-template-columns: 60% 40%;
-    grid-template-rows: auto;
+    grid-template-rows: auto auto 1fr;
     grid-gap: 2rem;
+}
+
+.home-container > :nth-child(3) {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
 }
 
 .home-container > :nth-child(4) {
     grid-column: 2;
     grid-row: 2 / span 2;
+}
+
+.home-container > :nth-child(5) {
+    grid-column: 1;
+    grid-row: 3;
 }
 
 .progress-bar-container {
@@ -21,9 +35,97 @@
     overflow: hidden;
 }
 
-.wallets-header {
+.home-sections-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.home-balance-summary-wrapper .balance-summary {
+    height: 25rem !important;
+}
+
+.home-balance-summary-wrapper .overlay-image {
+    height: 30rem !important;
+    width: auto !important;
+}
+
+.recent-transactions-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.transaction-item {
+    padding: 0.8rem 0;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.left-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.transaction-category {
+    font-size: 3rem;
+    margin-bottom: 0.2rem;
+}
+
+.transaction-date {
+    font-size: 1.5rem;
+    color: #777;
+}
+
+.right-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.transaction-amount {
+    font-size: 2.5rem;
+    text-align: right;
+}
+
+.expense {
+    color: red;
+}
+
+.income {
+    color: green;
+}
+
+.transaction-wallet {
+    font-size: 1.5rem;
+    color: #777;
+    text-align: right;
+}
+
+@media (min-width: 600px) {
+    .transaction-details {
+        align-items: center;
+    }
+
+    .left-section {
+        align-items: flex-start;
+    }
+
+    .right-section {
+        align-items: flex-end;
+    }
+}
+
+.summary-date {
+    margin-bottom: 3rem;
+}

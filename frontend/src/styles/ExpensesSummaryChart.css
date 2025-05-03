@@ -1,0 +1,10 @@
+.expenses-summary-chart-container {
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+}
+
+.expenses-summary-chart-container > canvas {
+    width: 100% !important;
+    height: auto !important;
+}
