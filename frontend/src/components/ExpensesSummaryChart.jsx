@@ -30,8 +30,10 @@ const ExpensesSummaryChart = ({ selectedYear, selectedMonth }) => {
 
     const categories = {};
     filteredData.forEach((t) => {
-        const category = t.category_name;
-        categories[category] = (categories[category] || 0) + parseFloat(t.amount);
+        const category = t.category?.name;
+        if (category) {
+          categories[category] = (categories[category] || 0) + parseFloat(t.amount);
+        }
     });
 
     const chartData = {
