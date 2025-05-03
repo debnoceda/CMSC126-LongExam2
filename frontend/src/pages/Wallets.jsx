@@ -10,8 +10,10 @@ function Wallets() {
     <div className="wallets-container">
       <Header />
       <BalanceSummary />
-      <h2>Wallets</h2>
-      <WalletsList />
+      <section className="wallets-list">
+        <h2>Wallets</h2>
+        <WalletsList />
+      </section>
     </div>
   );
 }
