@@ -8,6 +8,9 @@ from .models import Category, Wallet, Transaction
 from datetime import date
 from django.db.models import Sum
 from django.http import JsonResponse
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -114,19 +117,36 @@ class TransactionViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
+    parser_classes = [MultiPartParser, FormParser]
+
     def get_permissions(self):
         if self.action == 'create':
             return [AllowAny()]
         return [IsAuthenticated()]
-    
+
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return User.objects.none()
         return User.objects.filter(id=self.request.user.id)
-    
+
     def perform_update(self, serializer):
-        # Ensure users can only update their own profile
         if serializer.instance.id != self.request.user.id:
-            raise serializer.ValidationError("You can only update your own profile.")
+            raise serializers.ValidationError("You can only update your own profile.")
         serializer.save()
+
+    @action(detail=True, methods=['PUT'], parser_classes=[MultiPartParser, FormParser])
+    def update_profile_picture(self, request, pk=None):
+        user = self.get_object()
+
+        if 'profile_picture' not in request.FILES:
+            return Response({'error': 'No image provided'}, status=400)
+        
+        profile = getattr(user, 'profile', None)
+        if not profile:
+            return Response({'error': 'User profile not found'}, status=404)
+        
+        profile.profile_picture = request.FILES['profile_picture']
+        profile.save()
+
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
