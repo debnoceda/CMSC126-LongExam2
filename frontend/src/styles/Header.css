@@ -55,3 +55,42 @@
 .header-btn:hover {
     background-color: rgba(0, 0, 0, 0.05);
 }
+
+.profile-dropdown-container {
+    position: relative; /* Add this line */
+    display: inline-block; /* Or other suitable display */
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 1rem);
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 2.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    width: 150px;
+    overflow: hidden;
+}
+
+.dropdown button {
+    width: 100%;
+    padding: 2rem 2rem;
+    text-align: left;
+    border: none;
+    background: transparent;
+    color: #333;
+}
+
+.dropdown button:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown-button {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}

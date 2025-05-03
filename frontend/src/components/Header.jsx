@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef  } from "react";
 import "../styles/Header.css";
 import { Icon } from "@iconify/react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,6 +16,8 @@ const Header = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
     const today = new Date().toLocaleDateString(undefined, {
         weekday: "long",
@@ -46,9 +48,31 @@ const Header = () => {
         fetchUserData();
     }, []);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsDropdownOpen(false);
+          }
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, [dropdownRef]);
+
     const handleTitleClick = () => {
         if (!isHome) navigate("/home");
     };
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(!isDropdownOpen);
+      };
+    
+      const handleLogout = () => {
+        console.log('Logout clicked');
+        navigate('/login');
+      };
 
     const wallets = [{ id: 1, name: "Default Wallet" }];
     const categories = [{ id: 1, name: "Food" }, { id: 2, name: "Transport" }];
@@ -78,25 +102,36 @@ const Header = () => {
                     >
                         <Icon icon="typcn:plus" className="icon" style={{ fontSize: "7rem" }} />
                     </button>
-                    <button
-                        className="header-btn profile"
-                        onClick={() => navigate("/profile")}
-                    >
-                        <img 
-                            src={user?.profile_picture || defaultProfile}
-                            alt="Profile"
-                            onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.src = defaultProfile;
-                            }}
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                borderRadius: '50%'
-                            }}
-                        />
-                    </button>
+                    <div className="profile-dropdown-container" ref={dropdownRef}>
+                    <button className="header-btn profile" onClick={toggleDropdown}>
+                            <img
+                                src={user?.profile_picture || defaultProfile}
+                                alt="Profile"
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = defaultProfile;
+                                }}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    borderRadius: '50%'
+                                }}
+                            />
+                        </button>
+                        {isDropdownOpen && (
+                            <div className="dropdown">
+                                <button className="dropdown-button" onClick={() => navigate("/profile")}>
+                                    <Icon icon="iconamoon:profile-fill" className="icon" />
+                                    <p>See Profile</p>
+                                </button>
+                                <button className="dropdown-button" onClick={handleLogout}>
+                                    <Icon icon="mdi:logout" className="icon" />
+                                    <p>Logout</p>
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </nav>
             </div>
 
