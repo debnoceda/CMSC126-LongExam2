@@ -116,6 +116,25 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
         return JsonResponse(chart_data)
 
+    @action(detail=False, methods=['get'], url_path='total_balance')
+    def total_balance(self, request):
+        # Filter transactions for the authenticated user
+        transactions = Transaction.objects.filter(user=request.user)
+
+        # Calculate total income and total expenses
+        total_income = transactions.filter(transaction_type='income').aggregate(total=Sum('amount'))['total'] or 0
+        total_expense = transactions.filter(transaction_type='expense').aggregate(total=Sum('amount'))['total'] or 0
+
+        # Calculate total balance
+        total_balance = total_income - total_expense
+
+        # Return the result as a JSON response
+        return Response({
+            'total_income': total_income,
+            'total_expense': total_expense,
+            'total_balance': total_balance
+        })
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer

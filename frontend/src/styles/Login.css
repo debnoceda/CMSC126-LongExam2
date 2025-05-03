@@ -3,7 +3,7 @@
     grid-template-columns: 2fr 3fr;
     grid-template-rows: 1fr;
     align-items: center;
-    margin-top: 8rem;
+    width: 100%;
 }
 
 .login-form-container{
