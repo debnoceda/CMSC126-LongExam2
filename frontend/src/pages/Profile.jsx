@@ -7,6 +7,8 @@ import defaultProfile from '../assets/Progil.png';
 import Modal from '../components/Modal';
 import ModalFooter from '../components/ModalFooter';
 import ModalHeader from '../components/ModalHeader';
+import Form from '../components/Form';
+import { Icon } from "@iconify/react";
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -15,6 +17,7 @@ function Profile() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -137,25 +140,36 @@ function Profile() {
             title="Edit Profile Picture"
             onClose={handleCloseModal}
           />
-          <div className="preview-container">
-            {previewUrl ? (
-              <img 
-                src={previewUrl} 
-                alt="Preview" 
-                className="preview-image"
+          <div className="upload-photo-container">
+            <div className="preview-container">
+              {previewUrl ? (
+                <img 
+                  src={previewUrl} 
+                  alt="Preview" 
+                  className="preview-image"
+                />
+              ) : (
+                <img 
+                  src={user.profile_picture} 
+                  alt="Profile" 
+                  className="preview-image"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = defaultProfile;
+                  }}
+                />
+              )}
+            </div>
+            <label className='custom-file-label'>
+              Upload Profile
+              <input 
+                type="file" 
+                onChange={handleFileChange}
+                accept="image/*"
+                className="file-input"
               />
-            ) : (
-              <div className="preview-placeholder">
-                <p>No image selected</p>
-              </div>
-            )}
+            </label>
           </div>
-          <input 
-            type="file" 
-            onChange={handleFileChange}
-            accept="image/*"
-            className="file-input"
-          />
           <ModalFooter
             onDelete={handleDeleteProfilePicture}
             onAction={handleSaveProfilePicture}
@@ -169,33 +183,61 @@ function Profile() {
           <>
             <div className="title-button-container">
               <h2>Personal Information</h2>
-              <Button type="small" text="Edit"></Button>
+              {!isEditing && (
+                <Button 
+                  type="small" 
+                  text="Edit" 
+                  onClick={() => setIsEditing(true)}
+                />
+              )}
             </div>
-            <div className="info-grid">
-              <div className="user-name">
-                <div className="info-item">
-                  <label>First Name</label>
-                  <p>{user.first_name}</p>
+            {isEditing ? (
+              <Form 
+                method="profile"
+                initialValues={{
+                  first_name: user.first_name,
+                  last_name: user.last_name,
+                  email: user.email,
+                  monthly_budget: user.monthly_budget
+                }}
+                onSubmit={async (values) => {
+                  try {
+                    await api.put(`/api/users/${user.id}/`, values);
+                    setUser({ ...user, ...values });
+                    setIsEditing(false);
+                  } catch (error) {
+                    console.error("Failed to update user:", error);
+                  }
+                }}
+                onCancel={() => setIsEditing(false)}
+              />
+            ) : (
+              <div className="info-grid">
+                <div className="user-name">
+                  <div className="info-item">
+                    <label>First Name</label>
+                    <p>{user.first_name}</p>
+                  </div>
+                  <div className="info-item">
+                    <label>Last Name</label>
+                    <p>{user.last_name}</p>
+                  </div>
                 </div>
                 <div className="info-item">
-                  <label>Last Name</label>
-                  <p>{user.last_name}</p>
+                  <label>Email</label>
+                  <p>{user.email}</p>
+                </div>
+                <div className="info-item">
+                  <label>Password</label>
+                  <p>{user.email}</p>
+                </div>
+                <div className="separator"></div>
+                <div className="info-item-monthly-budget">
+                  <h2>Monthly Budget</h2>
+                  <h1>₱{user.monthly_budget?.toFixed(2) || '0.00'}</h1>
                 </div>
               </div>
-              <div className="info-item">
-                <label>Email</label>
-                <p>{user.email}</p>
-              </div>
-              <div className="info-item">
-                <label>Password</label>
-                <p>{user.email}</p>
-              </div>
-              <div className="separator"></div>
-              <div className="info-item-monthly-budget">
-                <h2>Monthly Budget</h2>
-                <h1>₱{user.monthly_budget?.toFixed(2) || '0.00'}</h1>
-              </div>
-            </div>
+            )}
           </>
         ) : (
           <div>No user data to display.</div>
