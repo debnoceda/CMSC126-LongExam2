@@ -80,27 +80,43 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                     size={"large"}
                 />
             </section>
-            <form onSubmit={handleSubmit}>
-                <p>Name</p>
-                <InputField
-                    type="text"
-                    placeholder="Wallet Name"
-                    value={newWalletName}
-                    onChange={(e) => setNewWalletName(e.target.value)}
-                    required
-                    className="form-input"
-                    variant="small"
-                />
-                <p>Balance</p>
-                <InputField
-                    type="number"
-                    step="0.01"
-                    placeholder="Balance"
-                    value={newWalletBalance}
-                    onChange={(e) => setNewWalletBalance(e.target.value)}
-                    className="form-input"
-                    variant="small"
-                />
+            <form onSubmit={handleSubmit} className='wallet-form'>
+                <div className="form-row">
+                    <label htmlFor="wallet-name">Name</label>
+                    <InputField
+                        id="wallet-name"
+                        type="text"
+                        placeholder="Wallet Name"
+                        value={newWalletName}
+                        onChange={(e) => setNewWalletName(e.target.value)}
+                        required
+                        className="form-input wallet-form-input"
+                        variant="small"
+                    />
+                </div>
+                <div className="form-row">
+                    <label htmlFor="wallet-balance">Balance</label>
+                    <InputField
+                        id="wallet-balance"
+                        type="number"
+                        step="0.01"
+                        placeholder="Balance"
+                        value={newWalletBalance}
+                        onChange={(e) => setNewWalletBalance(e.target.value)}
+                        className="form-input wallet-form-input"
+                        variant="small"
+                    />
+                </div>
+                <div className="form-row">
+                    <label htmlFor="wallet-color">Color</label>
+                    <input
+                        id="wallet-color"
+                        type="color"
+                        value={newWalletColor}
+                        onChange={(e) => setNewWalletColor(e.target.value)}
+                        className="form-input input-element color-picker wallet-form-input"
+                    />
+                </div>
             </form>
             <ModalFooter
                 onDelete={wallet ? () => setDeleteConfirmOpen(true) : onClose}

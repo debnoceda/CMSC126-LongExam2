@@ -84,3 +84,57 @@ input:focus {
 .input-message.error{
     color: #CD3738;
 }
+
+.wallet-form-input {
+    margin-bottom: 0 !important;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+    border: 0;
+}
+.color-picker {
+    padding: 0;
+    block-size: 27px;
+
+}
+
+/* Default stacked layout for small screens */
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+}
+
+.form-row label {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight:600;
+}
+
+.form-row .form-input {
+    width: 100%;
+}
+
+/* Side-by-side layout for larger screens */
+@media (min-width: 600px) {
+    .form-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .form-row label {
+        flex: 1;
+        margin-bottom: 0;
+        text-align: left;
+        margin-right: 1rem;
+    }
+
+    .form-row .form-input {
+        flex: 3;
+    }
+}
