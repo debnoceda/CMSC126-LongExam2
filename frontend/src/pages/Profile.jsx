@@ -202,11 +202,44 @@ function Profile() {
                 }}
                 onSubmit={async (values) => {
                   try {
-                    await api.put(`/api/users/${user.id}/`, values);
-                    setUser({ ...user, ...values });
-                    setIsEditing(false);
+                    let formData = {};
+                    
+                    // Handle each field independently
+                    if (values.first_name && values.first_name !== user.first_name) {
+                      formData.first_name = values.first_name.trim();
+                    }
+                    
+                    if (values.last_name && values.last_name !== user.last_name) {
+                      formData.last_name = values.last_name.trim();
+                    }
+                    
+                    if (values.email && values.email !== user.email) {
+                      formData.email = values.email.trim();
+                    }
+
+                    // Improved monthly_budget handling
+                    const newBudget = parseFloat(values.monthly_budget);
+                    if (!isNaN(newBudget) && newBudget !== user.monthly_budget) {
+                      formData.monthly_budget = newBudget;
+                    }
+
+                    // Debug what's being updated
+                    console.log('Fields being updated:', Object.keys(formData));
+                    console.log('Update data:', formData);
+
+                    // Only make API call if there are changes
+                    if (Object.keys(formData).length > 0) {
+                      const response = await api.patch(`/api/users/${user.id}/`, formData);
+                      setUser({ ...user, ...response.data });
+                      setIsEditing(false);
+                      alert("Profile updated successfully!");
+                    } else {
+                      setIsEditing(false);
+                    }
+
                   } catch (error) {
-                    console.error("Failed to update user:", error);
+                    console.error("Update failed:", error);
+                    alert(error.response?.data?.message || "Failed to update profile");
                   }
                 }}
                 onCancel={() => setIsEditing(false)}
