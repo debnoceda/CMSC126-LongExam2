@@ -1,0 +1,54 @@
+/* General layout */
+.setup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: calc(100svh - 10rem);
+    padding: 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.setup-container > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+}
+
+.back-button {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: auto;
+}
+
+.setup-header {
+    margin-top: auto;
+}
+
+.setup-footer {
+    width: auto;
+    margin-top: auto;
+}
+
+.setup-header, .setup-body {
+    gap: 2.5rem;
+    margin-bottom: 5rem;
+}
+
+.setup-body > * {
+    width: 100%;
+    margin-top: 0 !important;
+    text-align: left;
+}
+
+.setup-body > img {
+    max-width: 400px;
+}
+
