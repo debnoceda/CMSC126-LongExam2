@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../contexts/UserContext"; // Import UserContext
 import api from "../api";
 import "../styles/Home.css";
 import Header from "../components/Header";
@@ -12,10 +13,10 @@ import Dropdown from "../components/Dropdown";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
+  const { user, loading: userLoading, error: userError } = useContext(UserContext); // Access UserContext
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
 
-  const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [recentTransactions, setRecentTransactions] = useState([]);
   const [selectedYear, setSelectedYear] = useState(currentYear);
@@ -54,34 +55,31 @@ function Home() {
   });
 
   useEffect(() => {
-    const fetchHomePageData = async () => {
+    const fetchTransactions = async () => {
       try {
-        const userResponse = await api.get("/api/users/");
-        const userData = userResponse.data;
-        if (Array.isArray(userData) && userData.length > 0) setUser(userData[0]);
-        else if (!Array.isArray(userData)) setUser(userData);
-        else console.warn("No user data available");
-
         const transactionsResponse = await api.get('/api/transactions/');
         const allTransactions = transactionsResponse.data;
         setTransactions(allTransactions);
 
         const sortedTransactions = [...allTransactions].sort((a, b) => new Date(b.date) - new Date(a.date));
         setRecentTransactions(sortedTransactions.slice(0, 3));
-
       } catch (error) {
-        console.error("Failed to load data:", error);
-        alert("Failed to load data. Please try again.");
+        console.error("Failed to load transactions:", error);
+        alert("Failed to load transactions. Please try again.");
       } finally {
         setLoading(false);
       }
     };
-    fetchHomePageData();
+
+    fetchTransactions();
   }, []);
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (userLoading || loading) return <div className="loading">Loading...</div>;
+
+  if (userError) return <div>Error: {userError}</div>;
 
   return (
+    // <p>Hi</p>
     <div className="home-wrapper">
       <Header />
       <div className="home-container">
@@ -143,7 +141,7 @@ function Home() {
                     <li key={transaction.id} className="transaction-item">
                     <div className="transaction-details">
                         <div className="left-section">
-                            <p className="transaction-category">{transaction.category.name}</p>
+                            <p className="transaction-category">{transaction.category?.name || 'No Category'}</p>
                             <p className="transaction-date">
                                 {new Date(transaction.date).toLocaleDateString()}
                             </p>
