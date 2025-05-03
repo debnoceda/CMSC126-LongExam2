@@ -37,9 +37,20 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def to_representation(self, instance):
+        request = self.context.get('request')  # Get request from context
         ret = super().to_representation(instance)
+
+        # Get the full URL of the profile picture
+        if instance.profile.profile_picture:
+            profile_picture_url = instance.profile.profile_picture.url
+            if request is not None:
+                profile_picture_url = request.build_absolute_uri(profile_picture_url)
+            ret['profile_picture'] = profile_picture_url
+        else:
+            ret['profile_picture'] = None
+
+        # Add monthly budget
         ret['monthly_budget'] = instance.profile.monthly_budget
-        ret['profile_picture'] = instance.profile.profile_picture.url if instance.profile.profile_picture else None
         return ret
 
     def update(self, instance, validated_data):
@@ -62,13 +73,16 @@ class UserSerializer(serializers.ModelSerializer):
 
         instance.save()
 
+        # Ensure UserProfile exists
+        profile, created = UserProfile.objects.get_or_create(user=instance)
+
         if monthly_budget is not None:
-            instance.profile.monthly_budget = monthly_budget
+            profile.monthly_budget = monthly_budget
 
         if profile_picture is not None:
-            instance.profile.profile_picture = profile_picture
+            profile.profile_picture = profile_picture
 
-        instance.profile.save()
+        profile.save()
 
         return instance
 
