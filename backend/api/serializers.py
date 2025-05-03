@@ -96,18 +96,18 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class WalletSerializer(serializers.ModelSerializer):
+    balance = serializers.ReadOnlyField()
     class Meta:
         model = Wallet
         fields = ['id', 'name', 'balance', 'user', 'color']
-        read_only_fields = ['user']
+        read_only_fields = ['user', 'balance']
 
     def create(self, validated_data):
         return Wallet.objects.create(**validated_data)
     
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.balance = validated_data.get('balance', instance.balance)
-        instance.color= validated_data.get('color', instance.balance)
+        instance.color = validated_data.get('color', instance.color)
         instance.save()
         return instance
 
