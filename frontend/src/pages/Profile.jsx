@@ -8,7 +8,6 @@ import Modal from '../components/Modal';
 import ModalFooter from '../components/ModalFooter';
 import ModalHeader from '../components/ModalHeader';
 import Form from '../components/Form';
-import { Icon } from "@iconify/react";
 
 function Profile() {
   const [user, setUser] = useState(null);
@@ -258,10 +257,6 @@ function Profile() {
                 </div>
                 <div className="info-item">
                   <label>Email</label>
-                  <p>{user.email}</p>
-                </div>
-                <div className="info-item">
-                  <label>Password</label>
                   <p>{user.email}</p>
                 </div>
                 <div className="separator"></div>
