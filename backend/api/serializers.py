@@ -118,10 +118,10 @@ class TransactionSerializer(serializers.ModelSerializer):
     wallet = WalletSerializer(read_only=True)
     wallet_id = serializers.PrimaryKeyRelatedField(queryset=Wallet.objects.all(), source='wallet', write_only=True)
 
-    category_name = serializers.CharField(source='category.name', read_only=True)
+    # category_name = serializers.CharField(source='category.name', read_only=True)
     class Meta:
         model = Transaction
-        fields = ['id', 'title', 'amount', 'transaction_type', 'date', 'notes', 'wallet', 'wallet_id', 'category', 'category_id', 'category_name']
+        fields = ['id', 'title', 'amount', 'transaction_type', 'date', 'notes', 'wallet', 'wallet_id', 'category', 'category_id']
 
     def validate_amount(self, value):
         if value <= 0:
