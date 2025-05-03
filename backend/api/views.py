@@ -27,13 +27,13 @@ class WalletViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-    
+
     def perform_update(self, serializer):
         instance = serializer.save()
         if instance.balance < 0:
             raise serializer.ValidationError("Wallet balance cannot be negative.")
         instance.save()
-    
+
     def perform_destroy(self, instance):
         if instance.user != self.request.user:
             raise serializers.ValidationError("You do not have permission to delete this wallet.")
@@ -48,43 +48,23 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Transaction.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        instance = serializer.save(user=self.request.user)
-
-        #Update wallet balance based on transaction type
-        if instance.transaction_type == 'income':
-            instance.wallet.balance += instance.amount
-        else:
-            if instance.wallet.balance < instance.amount:
-                raise serializer.ValidationError("Insufficient funds in the wallet.")
-            instance.wallet.balance -= instance.amount
-        
-        instance.wallet.save()
+        serializer.save(user=self.request.user)
+        # The wallet balance will be automatically recalculated
+        # when the balance property is accessed next time.
 
     def perform_update(self, serializer):
-        instance = serializer.save()
-        if instance.transaction_type == 'expense' and instance.wallet.balance < instance.amount:
-            raise serializer.ValidationError("Insufficient funds in the wallet.")
-        if instance.transaction_type == 'income':
-            instance.wallet.balance += instance.amount
-        else:
-            instance.wallet.balance -= instance.amount
-        instance.wallet.save()
-        instance.save()
+        serializer.save()
+        # The wallet balance will be automatically recalculated.
 
     def perform_destroy(self, instance):
-        if instance.user != self.request.user:
-            raise serializers.ValidationError("You do not have permission to delete this transaction.")
-        if instance.transaction_type == 'income':
-            instance.wallet.balance -= instance.amount
-        else:
-            instance.wallet.balance += instance.amount
-        instance.wallet.save()
+        # When a transaction is deleted, the wallet balance
+        # will be automatically recalculated.
         instance.delete()
 
     @action(detail=False, methods=['get'], url_path='income_vs_expenses')
     def income_vs_expenses(self, request):
         current_year = date.today().year
-        user = self.request.user  # Get the currently logged-in user
+        user = self.request.user
 
         transactions = Transaction.objects.filter(user=user, date__year=current_year)
 
@@ -161,11 +141,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
         if 'profile_picture' not in request.FILES:
             return Response({'error': 'No image provided'}, status=400)
-        
+
         profile = getattr(user, 'profile', None)
         if not profile:
             return Response({'error': 'User profile not found'}, status=404)
-        
+
         profile.profile_picture = request.FILES['profile_picture']
         profile.save()
 

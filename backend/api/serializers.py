@@ -118,7 +118,6 @@ class TransactionSerializer(serializers.ModelSerializer):
     wallet = WalletSerializer(read_only=True)
     wallet_id = serializers.PrimaryKeyRelatedField(queryset=Wallet.objects.all(), source='wallet', write_only=True)
 
-    # category_name = serializers.CharField(source='category.name', read_only=True)
     class Meta:
         model = Transaction
         fields = ['id', 'title', 'amount', 'transaction_type', 'date', 'notes', 'wallet', 'wallet_id', 'category', 'category_id']
@@ -127,34 +126,33 @@ class TransactionSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError("Amount must be positive.")
         return value
-    
+
     def validate_date(self, value):
         from datetime import date
         if value > date.today():
             raise serializers.ValidationError("Date cannot be in the future.")
         return value
-    
+
     def create(self, validated_data):
-        category = validated_data.pop('category')
+        category = validated_data.pop('category', None)
         wallet = validated_data.pop('wallet')
         transaction = Transaction.objects.create(category=category, wallet=wallet, **validated_data)
         return transaction
-    
+
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
         instance.amount = validated_data.get('amount', instance.amount)
         instance.transaction_type = validated_data.get('transaction_type', instance.transaction_type)
         instance.date = validated_data.get('date', instance.date)
         instance.notes = validated_data.get('notes', instance.notes)
-        
+
         category = validated_data.get('category')
         if category:
             instance.category = category
-        
+
         wallet = validated_data.get('wallet')
         if wallet:
             instance.wallet = wallet
-        
+
         instance.save()
         return instance
-    
