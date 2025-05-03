@@ -50,10 +50,25 @@ const ExpensesSummaryChart = ({ selectedYear, selectedMonth }) => {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-            title: { display: false },
-            legend: { position: "right" },
+          title: { display: false },
+          legend: { position: "right" },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let label = context.label || '';
+
+                if (context.parsed !== null) {
+                  label += `: ₱${context.parsed.toFixed(2)}`;
+                }
+                return label;
+              },
+              title: function(context) {
+                return '';
+              }
+            }
+          }
         },
-    };
+      };
 
     return (
         <div className="expenses-summary-chart-container">

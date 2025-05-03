@@ -36,19 +36,17 @@ const ProgressBar = ({ budget }) => {
 
   if (loading) {
     return (
-      <div className="progress-bar-container">
-        <div className="progress-bar" style={{ width: '0%' }}></div>
-        <div className="progress-text">Loading...</div>
-      </div>
+      <Card title="Budget Progress" className="progress-card">
+        <div className="loading-notice">Loading Budget...</div>
+      </Card>
     );
   }
 
   if (budget <= 0) {
     return (
-      <div className="progress-bar-container">
-        <div className="progress-bar" style={{ width: '0%' }}></div>
-        <div className="progress-text">Budget is 0</div>
-      </div>
+      <Card title="Budget Progress" className="progress-card">
+        <h2 className="no-budget-notice">No Monthly Budget Set</h2>
+      </Card>
     );
   }
 
