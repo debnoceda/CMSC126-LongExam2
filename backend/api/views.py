@@ -84,8 +84,9 @@ class TransactionViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'], url_path='income_vs_expenses')
     def income_vs_expenses(self, request):
         current_year = date.today().year
+        user = self.request.user  # Get the currently logged-in user
 
-        transactions = Transaction.objects.filter(date__year=current_year)
+        transactions = Transaction.objects.filter(user=user, date__year=current_year)
 
         income_data = transactions.filter(transaction_type='income') \
             .values('date__month') \
