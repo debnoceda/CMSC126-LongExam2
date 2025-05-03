@@ -1,0 +1,29 @@
+.home-container {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: auto;
+    grid-gap: 2rem;
+}
+
+.home-container > :nth-child(4) {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+}
+
+.progress-bar-container {
+    width: 100%;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #eee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.wallets-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+

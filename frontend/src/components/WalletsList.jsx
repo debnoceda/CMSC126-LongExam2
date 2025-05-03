@@ -6,7 +6,7 @@ import Modal from './Modal';
 import WalletForm from './WalletForm';
 import api from '../api';
 
-function WalletsList() {
+function WalletsList({ limit }) {
   const [wallets, setWallets] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState(null);
@@ -63,9 +63,11 @@ function WalletsList() {
   if (loading) return <p>Loading wallets...</p>;
   if (error) return <p>{error}</p>;
 
+  const walletsToDisplay = limit ? wallets.slice(0, limit) : wallets;
+
   return (
     <section className="wallets-grid">
-      {wallets.map((wallet) => (
+      {walletsToDisplay.map((wallet) => (
         <WalletCard
           key={wallet.id}
           walletName={wallet.name}
