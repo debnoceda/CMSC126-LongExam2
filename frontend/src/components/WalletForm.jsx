@@ -8,7 +8,7 @@ import ConfirmAlert from './ConfirmAlert';
 
 function WalletForm({ wallet, onClose, onWalletUpdated }) {
     const [newWalletName, setNewWalletName] = useState(wallet?.name || "");
-    const [newWalletBalance, setNewWalletBalance] = useState(wallet?.balance || "");
+    const [newWalletBalance, setNewWalletBalance] = useState(wallet?.balance || 0);
     const [newWalletColor, setNewWalletColor] = useState(wallet?.color || "#84AE26");
     const [isDeleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [isUnsavedConfirmOpen, setUnsavedConfirmOpen] = useState(false);
@@ -20,7 +20,6 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                 // Update existing wallet
                 const response = await api.put(`/api/wallets/${wallet.id}/`, {
                     name: newWalletName,
-                    balance: parseFloat(newWalletBalance) || 0,
                     color: newWalletColor,
                 });
                 alert("Wallet updated successfully!");
@@ -29,7 +28,6 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                 // Add new wallet
                 const response = await api.post("/api/wallets/", {
                     name: newWalletName,
-                    balance: parseFloat(newWalletBalance) || 0,
                     color: newWalletColor,
                 });
                 alert("Wallet added successfully!");
@@ -94,7 +92,7 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                         variant="small"
                     />
                 </div>
-                <div className="form-row">
+                {/* <div className="form-row">
                     <label htmlFor="wallet-balance">Balance</label>
                     <InputField
                         id="wallet-balance"
@@ -106,7 +104,7 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                         className="form-input wallet-form-input"
                         variant="small"
                     />
-                </div>
+                </div> */}
                 <div className="form-row">
                     <label htmlFor="wallet-color">Color</label>
                     <input

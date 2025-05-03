@@ -30,9 +30,14 @@ class Category(models.Model):
 
 class Wallet(models.Model):
     name = models.CharField(max_length=100)
-    balance = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link wallets to users
     color = models.CharField(max_length=7, default="#84AE26")
+
+    @property
+    def balance(self):
+        income = self.transaction_set.filter(transaction_type='income').aggregate(models.Sum('amount'))['amount__sum'] or 0
+        expense = self.transaction_set.filter(transaction_type='expense').aggregate(models.Sum('amount'))['amount__sum'] or 0
+        return income - expense
 
     def __str__(self):
         return self.name
@@ -55,4 +60,3 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.transaction_type}) - {self.amount}"
-
