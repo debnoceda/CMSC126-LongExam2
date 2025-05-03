@@ -9,6 +9,7 @@ import ConfirmAlert from './ConfirmAlert';
 function WalletForm({ wallet, onClose, onWalletUpdated }) {
     const [newWalletName, setNewWalletName] = useState(wallet?.name || "");
     const [newWalletBalance, setNewWalletBalance] = useState(wallet?.balance || "");
+    const [newWalletColor, setNewWalletColor] = useState(wallet?.color || "#FFFFFF"); // Add state for color
     const [isDeleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [isUnsavedConfirmOpen, setUnsavedConfirmOpen] = useState(false);
 
@@ -20,6 +21,7 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                 const response = await api.put(`/api/wallets/${wallet.id}/`, {
                     name: newWalletName,
                     balance: parseFloat(newWalletBalance) || 0,
+                    color: newWalletColor, // Include color in the update
                 });
                 alert("Wallet updated successfully!");
                 onWalletUpdated(response.data);
@@ -28,12 +30,14 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                 const response = await api.post("/api/wallets/", {
                     name: newWalletName,
                     balance: parseFloat(newWalletBalance) || 0,
+                    color: newWalletColor, // Include color in the creation
                 });
                 alert("Wallet added successfully!");
                 onWalletUpdated(response.data);
             }
             setNewWalletName("");
             setNewWalletBalance("");
+            setNewWalletColor("#FFFFFF"); // Reset color
             onClose();
         } catch (error) {
             console.error("Error saving wallet:", error);
@@ -54,7 +58,10 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
     };
 
     const handleClose = () => {
-        const hasChanges = newWalletName !== wallet?.name || newWalletBalance !== wallet?.balance;
+        const hasChanges =
+            newWalletName !== wallet?.name ||
+            newWalletBalance !== wallet?.balance ||
+            newWalletColor !== wallet?.color;
         if (hasChanges) {
             setUnsavedConfirmOpen(true); // Open unsaved changes confirmation
         } else {
@@ -69,7 +76,7 @@ function WalletForm({ wallet, onClose, onWalletUpdated }) {
                 <WalletCard
                     walletName={newWalletName}
                     balance={newWalletBalance}
-                    cardColor={wallet?.cardColor || "var(--green)"}
+                    cardColor={newWalletColor} // Use the selected color
                     size={"large"}
                 />
             </section>
