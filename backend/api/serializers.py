@@ -14,20 +14,24 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        profile_data = validated_data.pop('profile', {})
-        monthly_budget = profile_data.get('monthly_budget', 0.00)
-        profile_picture = profile_data.get('profile_picture', None)
+        monthly_budget = validated_data.pop('monthly_budget', 0.00)
+        profile_picture = validated_data.pop('profile_picture', None)
 
         email = validated_data.pop('email')
         password = validated_data.pop('password')
 
+        if profile_picture is None:
+            profile_picture = 'default/Progil.png'  # Set your default path here
+
+        # Create the User object without the monthly_budget field
         user = User.objects.create_user(
             username=email,
             email=email,
             password=password,
-            **validated_data
+            **validated_data  # This will pass other fields like first_name, last_name, etc.
         )
 
+        # Create the UserProfile object and associate it with the user
         UserProfile.objects.create(
             user=user,
             monthly_budget=monthly_budget,

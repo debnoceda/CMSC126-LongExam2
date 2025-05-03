@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Header.css";
 import { Icon } from "@iconify/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import NavigationBar from "./NavigationBar";
 import Modal from "./Modal";
 import TransactionForm from "./TransactionForm";
+import api from '../api';
+import defaultProfile from '../assets/Progil.png';
 
 const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const isHome = location.pathname === "/home";
-
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const today = new Date().toLocaleDateString(undefined, {
@@ -19,8 +23,28 @@ const Header = () => {
         day: "numeric",
     });
     const greeting = "Good Day,";
-    const userName = "Dave";
-    const userProfileImageUrl = "src/assets/Froggy.png";
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await api.get('/api/users/');
+                const data = response.data;
+                if (Array.isArray(data) && data.length > 0) {
+                    setUser(data[0]);
+                } else if (!Array.isArray(data)) {
+                    setUser(data);
+                } else {
+                    setError('No user data available');
+                }
+            } catch (error) {
+                setError('Failed to load user information');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const handleTitleClick = () => {
         if (!isHome) navigate("/home");
@@ -29,6 +53,9 @@ const Header = () => {
     const wallets = [{ id: 1, name: "Default Wallet" }];
     const categories = [{ id: 1, name: "Food" }, { id: 2, name: "Transport" }];
 
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div className="error">{error}</div>;
+
     return (
         <header className="header">
             <div className="header-content">
@@ -36,7 +63,7 @@ const Header = () => {
                     <div className="home-header-text">
                         <p className="header-date">{today}</p>
                         <p className="header-greeting">{greeting}</p>
-                        <h1 className="header-name">{userName}</h1>
+                        <h1 className="header-name">{user?.first_name || 'User'}</h1>
                     </div>
                 ) : (
                     <h1 className="header-title clickable" onClick={handleTitleClick}>
@@ -54,13 +81,22 @@ const Header = () => {
                     <button
                         className="header-btn profile"
                         onClick={() => navigate("/profile")}
-                        style={{
-                            backgroundImage: userProfileImageUrl ? `url(${userProfileImageUrl})` : "none",
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            backgroundRepeat: "no-repeat"
-                        }}
-                    ></button>
+                    >
+                        <img 
+                            src={user?.profile_picture || defaultProfile}
+                            alt="Profile"
+                            onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = defaultProfile;
+                            }}
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                borderRadius: '50%'
+                            }}
+                        />
+                    </button>
                 </nav>
             </div>
 
