@@ -22,7 +22,7 @@
 .input-element {
     box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 2rem;
+    border-radius: 1.25rem;
     outline: none;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* soft shadow */
     transition: border-color 0.3s, box-shadow 0.3s;
@@ -60,7 +60,7 @@ input:focus {
 .password-toggle-inner {
     position: absolute;
     top: 50%;
-    right: 0.1rem;
+    right: 1.5rem;
     transform: translateY(-50%);
     display: flex;
     align-items: center;
@@ -137,4 +137,8 @@ input:focus {
     .form-row .form-input {
         flex: 3;
     }
+}
+
+.form-group {
+    margin-bottom: 4rem;
 }

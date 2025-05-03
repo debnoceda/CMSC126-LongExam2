@@ -21,7 +21,6 @@ const CustomDatepicker = ({ selectedDate, onChange, placeholder = "Pick a date",
     }, [selectedDate]);
 
     const handleChange = (value) => {
-        // Handle empty string, null, or invalid date
         if (!value || !(value instanceof Date) || isNaN(value)) {
             setDate(null);
             if (onChange) onChange(null);
@@ -47,6 +46,7 @@ const CustomDatepicker = ({ selectedDate, onChange, placeholder = "Pick a date",
                 format="yyyy-MM-dd"
                 placeholder={placeholder}
                 allowClean
+                disabledDate={(date) => date > new Date()} // Restrict future dates
                 style={{
                     borderRadius: "1.25rem",
                     fontSize: "1rem",

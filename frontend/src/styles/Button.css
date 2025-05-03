@@ -77,18 +77,57 @@
 
 /* Default Button */
 .text-button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--green);
     gap: 1rem;
     font-size: 3rem;
-    font-weight: bold;
     margin: 0;
+    padding: 1rem 1rem;
+    border-radius: 5rem;
+    border: 0.2rem solid var(--green);
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .text-button:hover {
+    background-color: rgba(132, 174, 38, 0.1);
     color: #5f8c1f;
     transform: scale(1.05);
 }
 
+.text-button.active {
+    background-color: var(--green);
+    color: white;
+}
+
 .text-button .btn-icon {
     font-size: 4rem;
+}
+
+.toggle-buttons {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.toggle-buttons .text-button {
+    flex: 1;
+    text-align: center;
+    padding: 1.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 1.25rem;
+    font-size: 2rem;
+    background-color: white;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-buttons .text-button.active {
+    border: 0.25rem solid var(--green);
+    background-color: var(--green);
+    color: white;
+    font-weight: bold;
 }

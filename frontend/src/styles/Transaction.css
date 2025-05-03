@@ -1,23 +1,21 @@
 .transaction-wrapper {
   padding: 2.5rem;
   border-radius: 2.5rem;
-  background: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   min-height: 80vh;
+  margin: 0 auto;
 }
 
 .transaction-header {
-  font-size: 3rem;
-  font-weight: bold;
   margin-bottom: 2rem;
 }
 
 .transactions-table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 2.5rem;
+  border-radius: 2rem;
   overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 .transactions-table th,
@@ -29,7 +27,6 @@
 
 .transactions-table th {
   background: #f9f9f9;
-  font-weight: bold;
   cursor: pointer;
 }
 
@@ -37,59 +34,23 @@
   background: #f1f1f1;
 }
 
-.transactions-table td:last-child a {
-  color: var(--green);
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.transactions-table td:last-child a:hover {
-  text-decoration: underline;
-}
-
 .amount-positive {
   color: var(--green);
-  font-weight: 600;
 }
 
 .amount-negative {
   color: var(--red);
-  font-weight: 600;
 }
 
-.form-button,
-.export-button {
-  border: none;
-  border-radius: 999px;
-  padding: 1rem 2rem;
-  font-size: 1.6rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.form-button {
-  background: var(--green);
-  color: #fff;
-}
-
-.form-button:hover {
-  background: #729421;
-}
-
-.export-button {
-  background: var(--yellow);
-  color: #000;
-  font-size: 1.4rem;
-}
-
-.export-button:hover {
-  background: #e6a540;
-}
-
-.pagination-controls {
+.export-button-wrapper {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
   margin-top: 2rem;
+}
+
+.scrollable-table-wrapper {
+  max-height: 70vh;
+  overflow-y: auto;
+  border-radius: 2rem;
+  border: 1px solid #eee;
 }

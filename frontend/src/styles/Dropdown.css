@@ -3,7 +3,7 @@
     width: auto;
     height: 5rem;
     font-size: 2rem;
-    font-weight: bold;
+    /* font-weight: bold; */
     user-select: none;
 }
 
@@ -12,6 +12,7 @@
     border: 1px solid #ccc;
     border-radius: 1.25rem;
     background-color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     display: flex;
     justify-content: space-between;

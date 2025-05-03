@@ -5,6 +5,9 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import UserSerializer, CategorySerializer, WalletSerializer, TransactionSerializer
 from .models import Category, Wallet, Transaction
+from datetime import date
+from django.db.models import Sum
+from django.http import JsonResponse
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -74,6 +77,39 @@ class TransactionViewSet(viewsets.ModelViewSet):
             instance.wallet.balance += instance.amount
         instance.wallet.save()
         instance.delete()
+
+    def get_income_vs_expenses(request):
+        current_year = date.today().year
+
+        transactions = Transaction.objects.filter(date__year=current_year)
+
+        income_data = transactions.filter(transaction_type='income') \
+            .values('date__month') \
+            .annotate(total_income=Sum('amount')) \
+            .order_by('date__month')
+
+        expense_data = transactions.filter(transaction_type='expense') \
+            .values('date__month') \
+            .annotate(total_expense=Sum('amount')) \
+            .order_by('date__month')
+
+        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        income_values = [0] * 12
+        expense_values = [0] * 12
+
+        for entry in income_data:
+            income_values[entry['date__month'] - 1] = entry['total_income']
+
+        for entry in expense_data:
+            expense_values[entry['date__month'] - 1] = entry['total_expense']
+
+        chart_data = {
+            'months': months,
+            'income': income_values,
+            'expenses': expense_values
+        }
+
+        return JsonResponse(chart_data)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

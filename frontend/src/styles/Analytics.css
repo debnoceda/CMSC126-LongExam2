@@ -1,0 +1,51 @@
+.analytics-container {
+    display: grid;
+    grid-template-columns: 40% 60%; /* 40% for first child and 60% for second */
+    grid-template-rows: auto; /* The rows should adjust based on content */
+    grid-gap: 2rem;
+}
+
+.analytics-container > :nth-child(1) {
+    grid-column: 1;
+    grid-row: 1;
+    height: auto; /* Height depends on the second child's height */
+    width: 100%; /* Width adjusts based on content */
+}
+
+.analytics-container > :nth-child(2) {
+    grid-column: 2;
+    grid-row: 1;
+    height: auto; /* Let this child (chart) adjust its height naturally */
+    width: 100%; /* Let this child (chart) adjust its width */
+}
+
+.analytics-container > :nth-child(3) {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+}
+
+.chart {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.expenses-summary {
+    width: 100%;
+}
+
+.summary-date {
+    display: flex;
+    gap: 1rem;
+}
+
+.summary-date .summary-year {
+    width: fit-content;
+}
+
+.recent-transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}

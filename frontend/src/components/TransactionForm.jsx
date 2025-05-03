@@ -1,31 +1,106 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../api';
+import ModalHeader from './ModalHeader';
+import ModalFooter from './ModalFooter';
+import ConfirmAlert from './ConfirmAlert';
+import InputField from './InputField';
+import CustomDropdown from './Dropdown';
+import CustomDatepicker from './DatePicker';
 
-function TransactionForm({ wallets, categories, onTransactionAdded, onCancel }) {
+function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, initialData = null }) {
     const [transactionTitle, setTransactionTitle] = useState("");
     const [transactionAmount, setTransactionAmount] = useState("");
     const [transactionType, setTransactionType] = useState("expense");
-    const [transactionDate, setTransactionDate] = useState(() => {
-        const today = new Date().toISOString().split('T')[0];
-        return today;
-    });
+    const [transactionDate, setTransactionDate] = useState(() => new Date().toISOString().split('T')[0]);
     const [transactionNotes, setTransactionNotes] = useState("");
     const [transactionCategoryId, setTransactionCategoryId] = useState("");
     const [transactionWalletId, setTransactionWalletId] = useState(wallets[0]?.id || "");
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [showUnsavedAlert, setShowUnsavedAlert] = useState(false);
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+    const [isDirty, setIsDirty] = useState(false);
+    const [walletList, setWalletList] = useState(wallets);
+    const [categoryList, setCategoryList] = useState(categories);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    useEffect(() => {
+        if (initialData) {
+            console.log('Initial Transaction Data:', initialData);
+            
+            // Set basic transaction data
+            setTransactionTitle(initialData.title || "");
+            setTransactionAmount(initialData.amount || "");
+            setTransactionType(initialData.transaction_type || "expense");
+            setTransactionDate(initialData.date || new Date().toISOString().split('T')[0]);
+            setTransactionNotes(initialData.notes || "");
 
-        const today = new Date();
-        const inputDate = new Date(transactionDate);
+            // Set wallet and category IDs
+            if (initialData.wallet) {
+                console.log('Setting Wallet:', initialData.wallet);
+                setTransactionWalletId(initialData.wallet.id);
+            }
 
-        if (inputDate > today) {
+            // Only set category if it's an expense and has a category
+            if (initialData.transaction_type === "expense" && initialData.category) {
+                console.log('Setting Category:', initialData.category);
+                setTransactionCategoryId(initialData.category.id);
+            }
+
+            setIsDirty(false);
+        }
+    }, [initialData]);
+
+    useEffect(() => {
+        const beforeUnloadHandler = (e) => {
+            if (isDirty) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+        window.addEventListener('beforeunload', beforeUnloadHandler);
+        return () => window.removeEventListener('beforeunload', beforeUnloadHandler);
+    }, [isDirty]);
+
+    // Fetch wallets and categories on mount
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [walletRes, categoryRes] = await Promise.all([
+                    api.get('/api/wallets/'),
+                    api.get('/api/categories/'),
+                ]);
+
+                setWalletList(walletRes.data);
+                setCategoryList(categoryRes.data);
+
+                // Only set default wallet if this is a new transaction
+                if (!initialData) {
+                    setTransactionWalletId(walletRes.data[0]?.id || "");
+                }
+            } catch (error) {
+                console.error("Error fetching wallets or categories:", error);
+                alert("Failed to fetch wallet or category data.");
+            }
+        };
+
+        fetchData();
+    }, [initialData]);
+
+    const markDirty = () => setIsDirty(true);
+
+    const handleSubmit = async () => {
+        if (new Date(transactionDate) > new Date()) {
             alert("Date cannot be in the future.");
             return;
         }
 
         try {
-            const response = await api.post("/api/transactions/", {
+            const url = initialData?.id
+                ? `/api/transactions/${initialData.id}/`
+                : `/api/transactions/`;
+
+            const method = initialData?.id ? api.put : api.post;
+
+            const response = await method(url, {
                 title: transactionTitle,
                 amount: parseFloat(transactionAmount),
                 transaction_type: transactionType,
@@ -37,97 +112,192 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel }) 
 
             onTransactionAdded(response.data);
             resetForm();
+            setShowConfirm(false);
         } catch (error) {
-            console.error("Error adding transaction:", error);
-            alert("Failed to add transaction. Please try again.");
+            console.error("Error submitting transaction:", error);
+            alert("Failed to submit transaction. Please try again.");
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!initialData?.id) return;
+        try {
+            await api.delete(`/api/transactions/${initialData.id}/`);
+            onTransactionAdded(null); // treat as deleted
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+            alert("Failed to delete transaction. Please try again.");
         }
     };
 
     const resetForm = () => {
-        const today = new Date().toISOString().split('T')[0];
         setTransactionTitle("");
         setTransactionAmount("");
         setTransactionType("expense");
-        setTransactionDate(today);
+        setTransactionDate(new Date().toISOString().split('T')[0]);
         setTransactionNotes("");
         setTransactionCategoryId("");
+        setIsDirty(false);
+    };
+
+    const handlePreSubmit = (e) => {
+        e.preventDefault();
+        setShowConfirm(true);
+    };
+
+    const handleCancel = () => {
+        if (isDirty) {
+            setShowUnsavedAlert(true);
+        } else {
+            onCancel();
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="form-container">
-            <input
+        <div className="modal-content">
+            <ModalHeader title={initialData ? "Edit Transaction" : "New Transaction"} onClose={handleCancel} />
+            <form onSubmit={handlePreSubmit}>
+            <div className="toggle-buttons">
+                <button
+                    type="button"
+                    className={`text-button ${transactionType === 'income' ? 'active' : ''}`}
+                    onClick={() => { setTransactionType('income'); markDirty(); }}
+                >
+                    <p>Income</p>
+                </button>
+                <button
+                    type="button"
+                    className={`text-button ${transactionType === 'expense' ? 'active' : ''}`}
+                    onClick={() => { setTransactionType('expense'); markDirty(); }}
+                >
+                    <p>Expense</p>
+                </button>
+            </div>
+
+            <p>Title*</p>
+            <InputField
                 type="text"
-                placeholder="Title"
+                placeholder="Add Title"
                 value={transactionTitle}
-                onChange={(e) => setTransactionTitle(e.target.value)}
+                onChange={(e) => { setTransactionTitle(e.target.value); markDirty(); }}
                 required
-                className="form-input"
+                className="form-group"
+                variant="small"
             />
-            <input
+
+            <p>Amount*</p>
+            <InputField
+                placeholder="000,000"
                 type="number"
-                step="0.01"
-                placeholder="Amount"
                 value={transactionAmount}
-                onChange={(e) => setTransactionAmount(e.target.value)}
+                onChange={(e) => { setTransactionAmount(e.target.value); markDirty(); }}
                 required
-                className="form-input"
-            />
-            <select
-                value={transactionType}
-                onChange={(e) => setTransactionType(e.target.value)}
-                required
-                className="form-input"
-            >
-                <option value="expense">Expense</option>
-                <option value="income">Income</option>
-            </select>
-
-            <input
-                type="date"
-                value={transactionDate}
-                onChange={(e) => setTransactionDate(e.target.value)}
-                required
-                className="form-input"
-                max={new Date().toISOString().split('T')[0]} // disables future dates in calendar picker
+                className="form-group"
+                variant="small"
             />
 
-            <select
-                value={transactionWalletId}
-                onChange={(e) => setTransactionWalletId(e.target.value)}
-                required
-                className="form-input"
-            >
-                <option value="">Select Wallet</option>
-                {wallets.map(wallet => (
-                    <option key={wallet.id} value={wallet.id}>{wallet.name}</option>
-                ))}
-            </select>
+            <div className="form-group">
+                <p>Wallet*</p>
+                <CustomDropdown
+                    options={walletList.map(wallet => ({
+                        label: wallet.name,
+                        value: wallet.id
+                    }))}
+                    selectedValue={transactionWalletId}
+                    onSelect={(value) => {
+                        console.log('Selected Wallet:', value);
+                        setTransactionWalletId(value);
+                        markDirty();
+                    }}
+                    placeholder="Select Wallet"
+                    defaultValue={walletList.find(w => w.id === transactionWalletId)?.name || "Select Wallet"}
+                />
+            </div>
 
             {transactionType === "expense" && (
-                <select
-                    value={transactionCategoryId}
-                    onChange={(e) => setTransactionCategoryId(e.target.value)}
-                    required
-                    className="form-input"
-                >
-                    <option value="">Select Category</option>
-                    {categories.map(category => (
-                        <option key={category.id} value={category.id}>
-                            {category.name}
-                        </option>
-                    ))}
-                </select>
+                <div className="form-group">
+                    <p>Category *</p>
+                    <CustomDropdown
+                        options={categoryList.map(cat => ({
+                            label: cat.name,
+                            value: cat.id
+                        }))}
+                        selectedValue={transactionCategoryId}
+                        onSelect={(value) => {
+                            console.log('Selected Category:', value);
+                            setTransactionCategoryId(value);
+                            markDirty();
+                        }}
+                        placeholder="Select Category"
+                        value={categoryList.find(c => c.id === transactionCategoryId)?.name}
+                    />
+                </div>
             )}
 
-            <textarea
-                placeholder="Notes (Optional)"
-                value={transactionNotes}
-                onChange={(e) => setTransactionNotes(e.target.value)}
-                className="form-input"
+            <div className="form-group">
+                <p>Date</p>
+                <CustomDatepicker
+                    selectedDate={transactionDate}
+                    onChange={(date) => {
+                        if (date instanceof Date && !isNaN(date)) {
+                            setTransactionDate(date.toISOString().split("T")[0]);
+                            markDirty();
+                        }
+                    }}
+                />
+            </div>
+
+            <div className="form-group">
+                <p>Notes</p>
+                <InputField
+                    type="text"
+                    value={transactionNotes}
+                    onChange={(e) => { setTransactionNotes(e.target.value); markDirty(); }}
+                    placeholder="Add a note"
+                    className="form-group"
+                    variant="small"
+                />
+            </div>
+
+            </form>
+            <ModalFooter
+                onAction={handlePreSubmit}
+                onDelete={() => initialData ? setShowDeleteAlert(true) : handleCancel()}
+                actionTitle={initialData ? "Update" : "Add"}
             />
-            <button type="submit" className="form-button">Add Transaction</button>
-            <button type="button" className="form-button cancel" onClick={onCancel}>Cancel</button>
-        </form>
+            <ConfirmAlert
+                isOpen={showConfirm}
+                title={initialData ? "Confirm Update" : "Confirm Transaction"}
+                mainActionTitle={initialData ? "Update" : "Add"}
+                secondActionTitle="Cancel"
+                onMainAction={handleSubmit}
+                onSecondAction={() => setShowConfirm(false)}
+            >
+                {initialData
+                    ? "Are you sure you want to update this transaction?"
+                    : "Are you sure you want to add this transaction?"}
+            </ConfirmAlert>
+            <ConfirmAlert
+                isOpen={showDeleteAlert}
+                title="Delete Transaction"
+                mainActionTitle="Delete"
+                secondActionTitle="Cancel"
+                onMainAction={handleDelete}
+                onSecondAction={() => setShowDeleteAlert(false)}
+            >
+                Are you sure you want to delete this transaction?
+            </ConfirmAlert>
+            <ConfirmAlert
+                isOpen={showUnsavedAlert}
+                title="Unsaved Changes"
+                mainActionTitle="Discard"
+                secondActionTitle="Keep Editing"
+                onMainAction={onCancel}
+                onSecondAction={() => setShowUnsavedAlert(false)}
+            >
+                You have unsaved changes. Are you sure you want to leave?
+            </ConfirmAlert>
+        </div>
     );
 }
 
