@@ -2,17 +2,22 @@ import { Navigate } from "react-router-dom";
 import { jwtDecode} from "jwt-decode";
 import api from "../api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import Setup from './Setup';
 
 function ProtectedRoute({ children }) {
-    const { user, loading, error } = useContext(UserContext);
+    const { user, loading, error, fetchUserData } = useContext(UserContext);
     const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(() => {
         auth().catch(() => setIsAuthorized(false));
     }, [])
+
+    useEffect(() => {
+        fetchUserData();
+    }
+    , []);
 
     const refreshToken = async () => {
         const refreshToken = localStorage.getItem(REFRESH_TOKEN)
@@ -52,7 +57,7 @@ function ProtectedRoute({ children }) {
     if (loading || isAuthorized === null) {
         return <div>Loading...</div>;
     }
-
+    
     const requiresSetup = !user?.monthly_budget;
 
     if (isAuthorized && requiresSetup) {
