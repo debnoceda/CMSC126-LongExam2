@@ -8,7 +8,9 @@ function Login(){
         <img src={FroggyMain} alt="Froggy Main"></img>
         <div className="login-form-container">
             <h1>Login</h1>
-            <Form route="/api/token/" method="login" />
+            <div className="login-input-container">
+                <Form route="/api/token/" method="login" />
+            </div>
             <p className="register-anchor">Not registered yet? <a href="/register"><strong>Create an account</strong></a></p>
         </div>
     </div>
