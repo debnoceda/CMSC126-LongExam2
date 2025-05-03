@@ -147,18 +147,20 @@ function Analytics() {
         setSelectedTransaction(null);
       }}>
         <TransactionForm
-          initialData={selectedTransaction}
-          wallets={transactions.map(t => t.wallet).filter((w, i, self) =>
-            w && self.findIndex(t => t.id === w.id) === i
-          )}
-          categories={transactions.map(t => t.category).filter((c, i, self) =>
-            c && self.findIndex(t => t.id === c.id) === i
-          )}
-          onTransactionAdded={handleTransactionAdded}
-          onCancel={() => {
-            setIsModalOpen(false);
-            setSelectedTransaction(null);
-          }}
+            initialData={selectedTransaction}
+            wallets={transactions
+            .map(t => t.wallet)
+            .filter((w, i, self) => w && self.findIndex(t => t?.id === w?.id) === i)
+        }
+            categories={transactions
+            .map(t => t.category)
+            .filter((c, i, self) => c && self.findIndex(t => t?.id === c?.id) === i)
+            }
+            onTransactionAdded={handleTransactionAdded}
+            onCancel={() => {
+                setIsModalOpen(false);
+                setSelectedTransaction(null);
+        }}
         />
       </Modal>
     </>
