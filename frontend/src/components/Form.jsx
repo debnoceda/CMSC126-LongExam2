@@ -58,7 +58,7 @@ function Form({ route, method, initialValues, onSubmit, onCancel }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (method === "profile") {
             if (checkForChanges()) {
                 setConfirmAction('save');
@@ -72,7 +72,12 @@ function Form({ route, method, initialValues, onSubmit, onCancel }) {
         try {
             const data = method === "login" 
                 ? { username: email, password: currentPassword }
-                : { first_name: firstName, last_name: lastName, email, password: newPassword };
+                : { 
+                    first_name: firstName, 
+                    last_name: lastName, 
+                    email, 
+                    password: method === "register" ? currentPassword : newPassword 
+                  };
 
             console.log("Sending data:", data);
             

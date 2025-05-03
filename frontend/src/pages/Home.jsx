@@ -17,6 +17,7 @@ function Home() {
 
   const [user, setUser] = useState(null);
   const [transactions, setTransactions] = useState([]);
+  const [recentTransactions, setRecentTransactions] = useState([]);
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
   const [loading, setLoading] = useState(true);
@@ -53,22 +54,20 @@ function Home() {
   });
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchHomePageData = async () => {
       try {
         const userResponse = await api.get("/api/users/");
         const userData = userResponse.data;
-
-        if (Array.isArray(userData) && userData.length > 0) {
-          setUser(userData[0]);
-        } else if (!Array.isArray(userData)) {
-          setUser(userData);
-        } else {
-          console.warn("No user data available");
-          setUser(null);
-        }
+        if (Array.isArray(userData) && userData.length > 0) setUser(userData[0]);
+        else if (!Array.isArray(userData)) setUser(userData);
+        else console.warn("No user data available");
 
         const transactionsResponse = await api.get('/api/transactions/');
-        setTransactions(transactionsResponse.data);
+        const allTransactions = transactionsResponse.data;
+        setTransactions(allTransactions);
+
+        const sortedTransactions = [...allTransactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+        setRecentTransactions(sortedTransactions.slice(0, 3));
 
       } catch (error) {
         console.error("Failed to load data:", error);
@@ -77,19 +76,21 @@ function Home() {
         setLoading(false);
       }
     };
-    fetchUserData();
+    fetchHomePageData();
   }, []);
 
   if (loading) return <div className="loading">Loading...</div>;
 
   return (
-    <>
+    <div className="home-wrapper">
       <Header />
       <div className="home-container">
         <SpendingSummaryCard budget={user?.monthly_budget?.toFixed(2) || '0.00'} />
-        <BalanceSummary />
+        <div className="home-balance-summary-wrapper">
+          <BalanceSummary />
+        </div>
         <Card title="Wallets" className="wallets-section">
-          <div className="wallets-header">
+          <div className="home-sections-header">
             <h2>Wallets</h2>
             <Button
               type="small"
@@ -125,9 +126,46 @@ function Home() {
             />
           )}
         </Card>
-        <BalanceSummary />
+        <Card title="Recent Transactions" className="recent-transactions">
+            <div className="home-sections-header">
+                <h2>Recent Transactions</h2>
+                <Button
+                type="small"
+                text={"View All"}
+                onClick={() => navigate("/transaction")}
+                />
+            </div>
+            {recentTransactions.length === 0 ? (
+                <p>No recent transactions.</p>
+            ) : (
+                <ul className="recent-transactions-list">
+                {recentTransactions.map(transaction => (
+                    <li key={transaction.id} className="transaction-item">
+                    <div className="transaction-details">
+                        <div className="left-section">
+                            <p className="transaction-category">{transaction.category.name}</p>
+                            <p className="transaction-date">
+                                {new Date(transaction.date).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <div className="right-section">
+                        <span
+                            className={`transaction-amount ${transaction.transaction_type === 'expense' ? 'expense' : 'income'}`}
+                        >
+                            {typeof transaction.amount === 'string' ? `₱${parseFloat(transaction.amount).toFixed(2)}` : `$${transaction.amount.toFixed(2)}`}
+                        </span>
+                        <span className="transaction-wallet">
+                            {transaction.wallet?.name || 'Unknown'}
+                        </span>
+                        </div>
+                    </div>
+                    </li>
+                ))}
+                </ul>
+            )}
+        </Card>
       </div>
-    </>
+    </div>
   );
 }
 
