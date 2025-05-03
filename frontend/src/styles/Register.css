@@ -37,3 +37,7 @@
 .login-anchor a:hover, .login-anchor a:focus, .login-anchor a:active{
     color:inherit;
 }
+
+.register-input-container{
+    width: 60%;
+}
