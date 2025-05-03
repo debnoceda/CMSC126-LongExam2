@@ -2,9 +2,12 @@ import { Navigate } from "react-router-dom";
 import { jwtDecode} from "jwt-decode";
 import api from "../api";
 import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../contexts/UserContext";
+import Setup from './Setup';
 
 function ProtectedRoute({ children }) {
+    const { user, loading, error } = useContext(UserContext);
     const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(() => {
@@ -46,8 +49,14 @@ function ProtectedRoute({ children }) {
         }
     }
 
-    if (isAuthorized === null) {
+    if (loading || isAuthorized === null) {
         return <div>Loading...</div>;
+    }
+
+    const requiresSetup = !user?.monthly_budget;
+
+    if (isAuthorized && requiresSetup) {
+        return <Setup />;
     }
 
     return isAuthorized ? children : <Navigate to="/login" />;
