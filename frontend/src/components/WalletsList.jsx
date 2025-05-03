@@ -66,7 +66,7 @@ function WalletsList({ limit }) {
   const walletsToDisplay = limit ? wallets.slice(0, limit) : wallets;
 
   return (
-    <section className="wallets-grid">
+    <section className={`wallets-grid ${limit ? 'wallets-grid-limit' : ''}`}>
       {walletsToDisplay.map((wallet) => (
         <WalletCard
           key={wallet.id}
@@ -77,7 +77,7 @@ function WalletsList({ limit }) {
           onClick={() => handleWalletClick(wallet)}
         />
       ))}
-      <AddWalletButton onClick={handleAddWallet} />
+      {!limit && <AddWalletButton onClick={handleAddWallet} />} {/* Hide button if limit is specified */}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal} title={'Wallet'}>
         <WalletForm
           wallet={selectedWallet}
