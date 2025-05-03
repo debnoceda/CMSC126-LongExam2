@@ -74,10 +74,6 @@ function Home() {
     fetchTransactions();
   }, []);
 
-  if (userLoading || loading) return <div className="loading">Loading...</div>;
-
-  if (userError) return <div>Error: {userError}</div>;
-
   return (
     // <p>Hi</p>
     <div className="home-wrapper">
