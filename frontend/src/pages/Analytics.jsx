@@ -5,6 +5,7 @@ import ExpensesSummaryChart from '../components/ExpensesSummaryChart';
 import Dropdown from '../components/Dropdown';
 import IncomeVsExpensesChart from '../components/IncomeVsExpensesChart';
 import Button from '../components/Button';
+import Card from '../components/Card';
 import { useLocation, useNavigate } from "react-router-dom";
 
 import Table from '../components/Table';
@@ -88,7 +89,7 @@ function Analytics() {
     <>
       <Header />
       <div className="analytics-container">
-        <div className="card chart expenses-summary">
+        <Card className="chart expenses-summary">
           <h2 className='expenses-summary-title'>Expenses Summary</h2>
           <div className='summary-date'>
             <Dropdown
@@ -113,7 +114,7 @@ function Analytics() {
               transactions={monthlyFilteredTransactions}
             />
           )}
-        </div>
+        </Card>
 
         <div className="card chart income-vs-expenses">
           <h2 className='income-vs-expenses'>Income vs Expenses</h2>

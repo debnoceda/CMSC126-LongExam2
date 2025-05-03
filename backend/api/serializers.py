@@ -58,9 +58,8 @@ class UserSerializer(serializers.ModelSerializer):
         return ret
 
     def update(self, instance, validated_data):
-        profile_data = validated_data.pop('profile', {})
-        monthly_budget = profile_data.get('monthly_budget')
-        profile_picture = profile_data.get('profile_picture')
+        monthly_budget = validated_data.get('monthly_budget', None)
+        profile_picture = validated_data.get('profile_picture', None)
 
         password = validated_data.pop('password', None)
         email = validated_data.pop('email', None)
