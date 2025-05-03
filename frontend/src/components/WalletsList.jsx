@@ -71,7 +71,7 @@ function WalletsList() {
           walletName={wallet.name}
           balance={wallet.balance}
           size={'small'}
-          cardColor={wallet.cardColor || '#ffffff'}
+          cardColor={wallet.color || '#84AE26'}
           onClick={() => handleWalletClick(wallet)}
         />
       ))}
