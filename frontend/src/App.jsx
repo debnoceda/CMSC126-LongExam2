@@ -11,6 +11,7 @@ import Profile from './pages/Profile';
 import LandingPage from './pages/LandingPage';
 import NotFound from './pages/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
+import PublicRoute from './components/PublicRoute';
 import Wallets from './pages/Wallets';
 
 function Layout({ children }) {
@@ -39,13 +40,13 @@ function App() {
     <UserProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<RegisterAndLogout />} />
+          {/* Public Routes */}
+          <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
+          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+          <Route path="/register" element={<PublicRoute><RegisterAndLogout /></PublicRoute>} />
           <Route path="/logout" element={<Logout />} />
           
           {/* Protected Routes with Layout */}
-          <Route path="/" element={<ProtectedRoute><Layout><Navigate to="/home" /></Layout></ProtectedRoute>} />
           <Route path="/home" element={<ProtectedRoute><Layout><Home /></Layout></ProtectedRoute>} />
           <Route path="/wallets" element={<ProtectedRoute><Layout><Wallets/></Layout></ProtectedRoute>} />
           <Route path="/transaction" element={<ProtectedRoute><Layout><Transaction/></Layout></ProtectedRoute>} />
