@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import Table from "../components/Table";
 import Button from "../components/Button";
 import "../styles/Transaction.css";
+import api from "../api";
 
 function Transaction() {
     const { transactions, fetchTransactions, wallets, categories } = useContext(UserContext); // Access transactions, fetchTransactions, wallets, and categories from context
