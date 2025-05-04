@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../contexts/UserContext'; // Import UserContext
 import api from '../api';
 import "../styles/Profile.css";
 import Header from "../components/Header";
@@ -10,36 +11,11 @@ import ModalHeader from '../components/ModalHeader';
 import Form from '../components/Form';
 
 function Profile() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { user, fetchUserData } = useContext(UserContext); // Access user and fetchUserData from context
   const [selectedFile, setSelectedFile] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await api.get('/api/users/');
-        console.log(response.data);
-        const data = response.data;
-        if (Array.isArray(data) && data.length > 0) {
-          setUser(data[0]);
-        } else if (!Array.isArray(data)) {
-          setUser(data);
-        } else {
-          setError('No user data available');
-        }
-      } catch (error) {
-        setError('Failed to load user information');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, []);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -61,32 +37,25 @@ function Profile() {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
-      // Fetch updated user data instead of reloading
-      const response = await api.get('/api/users/');
-      const data = response.data;
-      if (Array.isArray(data) && data.length > 0) {
-        setUser(data[0]);
-      } else if (!Array.isArray(data)) {
-        setUser(data);
-      }
-      
+
+      // Fetch updated user data
+      await fetchUserData();
       setShowModal(false);
       setSelectedFile(null);
       setPreviewUrl(null);
     } catch (error) {
       console.error("Upload failed", error);
-      setError(error.response?.data?.message || 'Failed to upload profile picture');
+      alert(error.response?.data?.message || 'Failed to upload profile picture');
     }
   };
 
   const handleDeleteProfilePicture = async () => {
     try {
       await api.delete(`/api/users/${user.id}/profile-picture/`);
+      await fetchUserData(); // Fetch updated user data
       setShowModal(false);
       setSelectedFile(null);
       setPreviewUrl(null);
-      window.location.reload();
     } catch (error) {
       console.error("Failed to delete profile picture:", error);
     }
@@ -104,10 +73,6 @@ function Profile() {
     setSelectedFile(null);
     setPreviewUrl(null);
   };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div className="error">{error}</div>;
-  if (!user) return <div className="error">No user data available</div>;
 
   return (
     <div className="profile-page">
@@ -222,16 +187,11 @@ function Profile() {
                       formData.monthly_budget = newBudget;
                     }
 
-                    // Debug what's being updated
-                    console.log('Fields being updated:', Object.keys(formData));
-                    console.log('Update data:', formData);
-
-                    // Only make API call if there are changes
                     if (Object.keys(formData).length > 0) {
-                      const response = await api.patch(`/api/users/${user.id}/`, formData);
-                      setUser({ ...user, ...response.data });
+                      await api.patch(`/api/users/${user.id}/`, formData);
+                      await fetchUserData(); // Fetch updated user data
                       setIsEditing(false);
-                      alert("Profile updated successfully!");
+                      // alert("Profile updated successfully!");
                     } else {
                       setIsEditing(false);
                     }
