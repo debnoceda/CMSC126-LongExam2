@@ -23,7 +23,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
     const [walletList, setWalletList] = useState(wallets);
     const [categoryList, setCategoryList] = useState(categories);
 
-    const { fetchBalanceSummary, fetchWallets } = useContext(UserContext);
+    const { fetchBalanceSummary, fetchWallets, fetchTransactions } = useContext(UserContext);
 
     useEffect(() => {
         if (initialData) {
@@ -117,6 +117,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
             resetForm();
             fetchBalanceSummary(); // Fetch updated balance summary
             fetchWallets();
+            fetchTransactions(); // Fetch updated transactions
             setShowConfirm(false);
         } catch (error) {
             console.error("Error submitting transaction:", error);
@@ -129,6 +130,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
         try {
             await api.delete(`/api/transactions/${initialData.id}/`);
             onTransactionAdded(null); // treat as deleted
+            fetchTransactions(); // Fetch updated transactions
         } catch (error) {
             console.error("Error deleting transaction:", error);
             alert("Failed to delete transaction. Please try again.");

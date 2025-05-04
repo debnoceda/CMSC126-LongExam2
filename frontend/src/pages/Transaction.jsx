@@ -1,29 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../contexts/UserContext";
 import TransactionForm from "../components/TransactionForm";
 import Modal from "../components/Modal";
 import Header from "../components/Header";
 import Table from "../components/Table";
 import Button from "../components/Button";
-import api from "../api";
 import "../styles/Transaction.css";
 
 function Transaction() {
-    const [transactions, setTransactions] = useState([]);
+    const { transactions, fetchTransactions, wallets, categories } = useContext(UserContext); // Access transactions, fetchTransactions, wallets, and categories from context
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
-
-    useEffect(() => {
-        fetchTransactions();
-    }, []);
-
-    const fetchTransactions = async () => {
-        try {
-            const response = await api.get("/api/transactions/");
-            setTransactions(response.data);
-        } catch (error) {
-            console.error("Error fetching transactions:", error);
-        }
-    };
 
     const handleAddClick = () => {
         setSelectedTransaction(null);

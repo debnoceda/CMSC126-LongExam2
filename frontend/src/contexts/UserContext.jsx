@@ -5,7 +5,7 @@ import api from '../api';
  * Sample Usage in a component:
  * import { useContext } from 'react';
  * import { UserContext } from '../contexts/UserContext';
- * const { user, loading, error, fetchUserData, updateMonthlyBudget, balanceSummary, fetchBalanceSummary, wallets, fetchWallets } = useContext(UserContext);
+ * const { user, loading, error, fetchUserData, updateMonthlyBudget, balanceSummary, fetchBalanceSummary, wallets, fetchWallets, transactions, fetchTransactions } = useContext(UserContext);
  */
 
 export const UserContext = createContext();
@@ -22,6 +22,9 @@ export const UserProvider = ({ children }) => {
   const [wallets, setWallets] = useState([]);
   const [walletsLoading, setWalletsLoading] = useState(true);
   const [walletsError, setWalletsError] = useState(null);
+  const [transactions, setTransactions] = useState([]);
+  const [transactionsLoading, setTransactionsLoading] = useState(true);
+  const [transactionsError, setTransactionsError] = useState(null);
 
   // Function to fetch user data
   const fetchUserData = async () => {
@@ -70,6 +73,21 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Function to fetch transactions
+  const fetchTransactions = async () => {
+    setTransactionsLoading(true);
+    try {
+      const response = await api.get('/api/transactions/');
+      setTransactions(response.data);
+      setTransactionsError(null);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      setTransactionsError('Failed to fetch transactions. Please try again.');
+    } finally {
+      setTransactionsLoading(false);
+    }
+  };
+
   // Function to update the monthly budget
   const updateMonthlyBudget = async (newBudget) => {
     if (!user) {
@@ -105,11 +123,12 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Fetch user data, balance summary, and wallets when the provider mounts
+  // Fetch user data, balance summary, wallets, and transactions when the provider mounts
   useEffect(() => {
     fetchUserData();
     fetchBalanceSummary();
     fetchWallets();
+    fetchTransactions();
   }, []);
 
   return (
@@ -127,6 +146,10 @@ export const UserProvider = ({ children }) => {
         fetchWallets,
         walletsLoading,
         walletsError,
+        transactions,
+        fetchTransactions,
+        transactionsLoading,
+        transactionsError,
       }}
     >
       {children}
