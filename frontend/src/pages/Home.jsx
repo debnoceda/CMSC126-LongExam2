@@ -13,7 +13,7 @@ import Dropdown from "../components/Dropdown";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const { user, loading: userLoading, error: userError } = useContext(UserContext); // Access UserContext
+  const { user, loading: userLoading, error: userError, fetchBalanceSummary, fetchWallets } = useContext(UserContext); // Access UserContext
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
 
@@ -72,6 +72,11 @@ function Home() {
     };
 
     fetchTransactions();
+  }, []);
+
+  useEffect(() => {
+    fetchBalanceSummary();
+    fetchWallets();
   }, []);
 
   return (
