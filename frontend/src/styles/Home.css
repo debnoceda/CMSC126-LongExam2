@@ -126,6 +126,13 @@
     }
 }
 
+@media (max-width: 600px) {
+    .home-container {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
 .summary-date {
     margin-bottom: 3rem;
 }

@@ -1,6 +1,6 @@
 .balance-summary {
     position: relative;
-    min-width: 300px;
+    width: 100%;
     height: 30rem;
     display: flex;
     flex-direction: column;
