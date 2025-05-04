@@ -4,35 +4,39 @@ import { ACCESS_TOKEN } from "../constants";
 import { useEffect, useState } from "react";
 
 function PublicRoute({ children }) {
-    const [isAuthorized, setIsAuthorized] = useState(null);
+    const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem(ACCESS_TOKEN);
-        if (!token) {
-            setIsAuthorized(false);
-            return;
-        }
-
-        try {
-            const decodedToken = jwtDecode(token);
-            const tokenExpiration = decodedToken.exp;
-            const now = Date.now() / 1000;
-
-            if (tokenExpiration < now) {
+        const checkAuth = () => {
+            const token = localStorage.getItem(ACCESS_TOKEN);
+            if (!token) {
                 setIsAuthorized(false);
-            } else {
-                setIsAuthorized(true);
+                setIsLoading(false);
+                return;
             }
-        } catch (error) {
-            setIsAuthorized(false);
-        }
+
+            try {
+                const decodedToken = jwtDecode(token);
+                const tokenExpiration = decodedToken.exp;
+                const now = Date.now() / 1000;
+
+                setIsAuthorized(tokenExpiration > now);
+            } catch (error) {
+                setIsAuthorized(false);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        checkAuth();
     }, []);
 
-    // if (isAuthorized === null) {
-    //     return <div>Loading...</div>;
-    // }
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-    return isAuthorized ? <Navigate to="/home" /> : children;
+    return isAuthorized ? <Navigate to="/home" replace /> : children;
 }
 
 export default PublicRoute; 
