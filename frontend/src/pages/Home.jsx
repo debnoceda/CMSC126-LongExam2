@@ -142,7 +142,7 @@ function Home() {
                     <li key={transaction.id} className="transaction-item">
                     <div className="transaction-details">
                         <div className="left-section">
-                            <p className="transaction-category">{transaction.category?.name || 'No Category'}</p>
+                            <p className="transaction-category">{transaction.category?.name || (transaction.transaction_type === 'income' ? 'Income' : 'Others')}</p>
                             <p className="transaction-date">
                                 {new Date(transaction.date).toLocaleDateString()}
                             </p>

@@ -8,7 +8,7 @@ const Table = ({ transactions, onViewDetails }) => {
     { Header: 'Date', accessor: 'date' },
     {
       Header: 'Category',
-      accessor: row => row.category?.name || 'N/A'
+      accessor: row => row.category?.name || 'Others'
     },
     {
       Header: 'Wallet',
