@@ -54,9 +54,9 @@ function ProtectedRoute({ children }) {
         }
     }
 
-    if (loading || isAuthorized === null) {
-        return <div>Loading...</div>;
-    }
+    // if (loading || isAuthorized === null) {
+    //     return <div>Loading...</div>;
+    // }
     
     const requiresSetup = !user?.monthly_budget;
 

@@ -77,8 +77,8 @@ const Header = () => {
     const wallets = [{ id: 1, name: "Default Wallet" }];
     const categories = [{ id: 1, name: "Food" }, { id: 2, name: "Transport" }];
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div className="error">{error}</div>;
+    // if (loading) return <div>Loading...</div>;
+    // if (error) return <div className="error">{error}</div>;
 
     return (
         <header className="header">

@@ -28,9 +28,9 @@ function PublicRoute({ children }) {
         }
     }, []);
 
-    if (isAuthorized === null) {
-        return <div>Loading...</div>;
-    }
+    // if (isAuthorized === null) {
+    //     return <div>Loading...</div>;
+    // }
 
     return isAuthorized ? <Navigate to="/home" /> : children;
 }
