@@ -4,6 +4,8 @@
     grid-template-rows: 1fr;
     align-items: center;
     width: 100%;
+    height: calc(100svh - 10rem);
+    box-sizing: border-box;
 }
 
 .login-form-container{
@@ -17,6 +19,7 @@
     width: 100%;
     justify-self: center;
     align-self: center;
+    box-sizing: border-box;
 }
 
 .login-form-container h1{
@@ -37,5 +40,24 @@
 }
 
 .login-input-container{
-    width: 60%;
+    width: 80%;
+}
+
+@media (max-width: 600px) {
+    .login-page, .register-page {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .login-form-container h1{
+        padding-bottom: 5rem;
+    }
+
+    .login-page img {
+        width: 300px;
+    }
+
+    .login-input-container{
+        width: 100%;
+    }
 }

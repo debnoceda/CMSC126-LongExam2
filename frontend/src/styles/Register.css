@@ -5,6 +5,7 @@
     align-items: center;
     justify-items: center;
     width: 100%;
+    height: calc(100svh - 10rem);
 }
 
 .register-form-container{
@@ -40,5 +41,26 @@
 }
 
 .register-input-container{
-    width: 60%;
+    width: 80%;
+}
+
+@media (max-width: 600px) {
+    .register-page {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .register-form-container h1{
+        padding-bottom: 5rem;
+        padding-top: 5rem;
+    }
+
+    .register-page img {
+        width: 300px;
+        order: -1;
+    }
+
+    .register-input-container{
+        width: 100%;
+    }
 }
