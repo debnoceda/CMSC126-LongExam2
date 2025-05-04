@@ -71,7 +71,7 @@ const Header = () => {
     
       const handleLogout = () => {
         console.log('Logout clicked');
-        navigate('/login');
+        navigate('/logout');
       };
 
     const wallets = [{ id: 1, name: "Default Wallet" }];
