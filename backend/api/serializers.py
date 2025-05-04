@@ -26,21 +26,28 @@ class UserSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
 
         if profile_picture is None:
-            profile_picture = 'default/Progil.png'  # Set your default path here
+            profile_picture = 'default/Progil.png'
 
-        # Create the User object without the monthly_budget field
+        # Create the User object
         user = User.objects.create_user(
             username=email,
             email=email,
             password=password,
-            **validated_data  # This will pass other fields like first_name, last_name, etc.
+            **validated_data
         )
 
-        # Create the UserProfile object and associate it with the user
+        # Create the UserProfile
         UserProfile.objects.create(
             user=user,
             monthly_budget=monthly_budget,
             profile_picture=profile_picture
+        )
+
+        # Create default "Cash" wallet for the user
+        Wallet.objects.create(
+            name="Cash",
+            user=user,
+            color="#84AE26"  # Default color
         )
 
         return user
