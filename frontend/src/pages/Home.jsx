@@ -15,6 +15,7 @@ function Home() {
   const {
     user,
     transactions,
+    fetchUserData,
     fetchTransactions,
     fetchBalanceSummary,
     fetchWallets,
@@ -60,6 +61,7 @@ function Home() {
   });
 
   useEffect(() => {
+    fetchUserData(); // Fetch user data from context
     fetchTransactions(); // Fetch transactions from context
     fetchBalanceSummary(); // Fetch balance summary
     fetchWallets(); // Fetch wallets
