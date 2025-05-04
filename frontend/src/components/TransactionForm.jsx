@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
 import api from '../api';
 import ModalHeader from './ModalHeader';
 import ModalFooter from './ModalFooter';
@@ -21,6 +22,8 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
     const [isDirty, setIsDirty] = useState(false);
     const [walletList, setWalletList] = useState(wallets);
     const [categoryList, setCategoryList] = useState(categories);
+
+    const { fetchBalanceSummary } = useContext(UserContext);
 
     useEffect(() => {
         if (initialData) {
@@ -112,6 +115,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
 
             onTransactionAdded(response.data);
             resetForm();
+            fetchBalanceSummary(); // Fetch updated balance summary
             setShowConfirm(false);
         } catch (error) {
             console.error("Error submitting transaction:", error);
