@@ -23,7 +23,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
     const [walletList, setWalletList] = useState(wallets);
     const [categoryList, setCategoryList] = useState(categories);
 
-    const { fetchBalanceSummary } = useContext(UserContext);
+    const { fetchBalanceSummary, fetchWallets } = useContext(UserContext);
 
     useEffect(() => {
         if (initialData) {
@@ -116,6 +116,7 @@ function TransactionForm({ wallets, categories, onTransactionAdded, onCancel, in
             onTransactionAdded(response.data);
             resetForm();
             fetchBalanceSummary(); // Fetch updated balance summary
+            fetchWallets();
             setShowConfirm(false);
         } catch (error) {
             console.error("Error submitting transaction:", error);
