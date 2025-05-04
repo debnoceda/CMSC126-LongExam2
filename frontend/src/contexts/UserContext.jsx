@@ -5,7 +5,7 @@ import api from '../api';
  * Sample Usage in a component:
  * import { useContext } from 'react';
  * import { UserContext } from '../contexts/UserContext';
- * const { user, loading, error, fetchUserData, updateMonthlyBudget, balanceSummary, fetchBalanceSummary } = useContext(UserContext);
+ * const { user, loading, error, fetchUserData, updateMonthlyBudget, balanceSummary, fetchBalanceSummary, wallets, fetchWallets } = useContext(UserContext);
  */
 
 export const UserContext = createContext();
@@ -19,6 +19,9 @@ export const UserProvider = ({ children }) => {
     total_income: 0,
     total_expense: 0,
   });
+  const [wallets, setWallets] = useState([]);
+  const [walletsLoading, setWalletsLoading] = useState(true);
+  const [walletsError, setWalletsError] = useState(null);
 
   // Function to fetch user data
   const fetchUserData = async () => {
@@ -49,6 +52,21 @@ export const UserProvider = ({ children }) => {
       setBalanceSummary(response.data);
     } catch (error) {
       console.error('Error fetching balance summary:', error);
+    }
+  };
+
+  // Function to fetch wallets
+  const fetchWallets = async () => {
+    setWalletsLoading(true);
+    try {
+      const response = await api.get('/api/wallets/');
+      setWallets(response.data);
+      setWalletsError(null);
+    } catch (error) {
+      console.error('Error fetching wallets:', error);
+      setWalletsError('Failed to fetch wallets. Please try again.');
+    } finally {
+      setWalletsLoading(false);
     }
   };
 
@@ -87,10 +105,11 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Fetch user data and balance summary when the provider mounts
+  // Fetch user data, balance summary, and wallets when the provider mounts
   useEffect(() => {
     fetchUserData();
     fetchBalanceSummary();
+    fetchWallets();
   }, []);
 
   return (
@@ -104,6 +123,10 @@ export const UserProvider = ({ children }) => {
         updateMonthlyBudget,
         balanceSummary,
         fetchBalanceSummary,
+        wallets,
+        fetchWallets,
+        walletsLoading,
+        walletsError,
       }}
     >
       {children}

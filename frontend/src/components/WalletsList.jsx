@@ -1,35 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import '../styles/WalletsList.css';
 import WalletCard from './WalletCard';
 import AddWalletButton from './AddWalletButton';
 import Modal from './Modal';
 import WalletForm from './WalletForm';
-import api from '../api';
+import { UserContext } from '../contexts/UserContext';
 
 function WalletsList({ limit }) {
-  const [wallets, setWallets] = useState([]);
+  const { wallets, fetchWallets, walletsLoading, walletsError } = useContext(UserContext); // Access wallets from context
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedWallet, setSelectedWallet] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Fetch wallets from the backend
-  const fetchWallets = async () => {
-    try {
-      const response = await api.get('/api/wallets/');
-      setWallets(response.data);
-    } catch (error) {
-      console.error('Error fetching wallets:', error);
-      setError('Failed to fetch wallets. Please try again.');
-    } finally {
-      setLoading(false); // Stop loading spinner
-    }
-  };
-
-  // Fetch wallets on component mount
-  useEffect(() => {
-    fetchWallets();
-  }, []);
 
   const handleWalletClick = (wallet) => {
     setSelectedWallet(wallet);
@@ -46,22 +26,13 @@ function WalletsList({ limit }) {
     setSelectedWallet(null);
   };
 
-  const handleWalletUpdated = (updatedWallet) => {
-    if (!updatedWallet) {
-      // Wallet was deleted
-      setWallets(wallets.filter((wallet) => wallet.id !== selectedWallet.id));
-    } else if (selectedWallet) {
-      // Wallet was updated
-      setWallets(wallets.map((wallet) => (wallet.id === updatedWallet.id ? updatedWallet : wallet)));
-    } else {
-      // New wallet was added
-      setWallets([...wallets, updatedWallet]);
-    }
-    handleCloseModal(); // Close the modal after updating
+  const handleWalletUpdated = () => {
+    fetchWallets(); // Refresh wallets after adding, updating, or deleting
+    handleCloseModal();
   };
 
-  if (loading) return <p>Loading wallets...</p>;
-  if (error) return <p>{error}</p>;
+  // if (walletsLoading) return <p>Loading wallets...</p>;
+  // if (walletsError) return <p>{walletsError}</p>;
 
   const walletsToDisplay = limit ? wallets.slice(0, limit) : wallets;
 
