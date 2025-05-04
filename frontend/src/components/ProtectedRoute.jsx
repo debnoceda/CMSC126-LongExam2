@@ -64,7 +64,7 @@ function ProtectedRoute({ children }) {
         return <Setup />;
     }
 
-    return isAuthorized ? children : <Navigate to="/login" />;
+    return isAuthorized ? children : <Navigate to="/" />;
 }
 
 export default ProtectedRoute;
