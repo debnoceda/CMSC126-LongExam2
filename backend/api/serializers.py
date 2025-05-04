@@ -13,6 +13,11 @@ class UserSerializer(serializers.ModelSerializer):
             'password': {'write_only': True},
         }
 
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already registered.")
+        return value
+
     def create(self, validated_data):
         monthly_budget = validated_data.pop('monthly_budget', 0.00)
         profile_picture = validated_data.pop('profile_picture', None)

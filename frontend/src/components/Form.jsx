@@ -18,6 +18,7 @@ function Form({ route, method, initialValues, onSubmit, onCancel }) {
     const [loading, setLoading] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [emailError, setEmailError] = useState("");
     const [focusedField, setFocusedField] = useState(null);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [hasChanges, setHasChanges] = useState(false);
@@ -58,6 +59,7 @@ function Form({ route, method, initialValues, onSubmit, onCancel }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setEmailError("");
 
         if (method === "profile") {
             if (checkForChanges()) {
@@ -96,7 +98,13 @@ function Form({ route, method, initialValues, onSubmit, onCancel }) {
             if (error.response) {
                 console.error("Response data:", error.response.data);
                 console.error("Status:", error.response.status);
-                alert(`Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
+                
+                // Handle email validation error
+                if (error.response.data.email) {
+                    setEmailError(error.response.data.email[0]);
+                } else {
+                    alert(`Error: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
+                }
             } else {
                 alert(error);
             }
@@ -184,11 +192,16 @@ function Form({ route, method, initialValues, onSubmit, onCancel }) {
                         type="email"
                         placeholder="Email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => {
+                            setEmail(e.target.value);
+                            setEmailError("");
+                        }}
                         required
-                        status={focusedField === 'email' ? 'focused' : 'default'}
+                        status={emailError ? 'error' : (focusedField === 'email' ? 'focused' : 'default')}
                         onFocus={() => handleFocus('email')}
                         onBlur={handleBlur}
+                        message={emailError}
+                        messageType="error"
                     />
 
                     <InputField
@@ -318,11 +331,16 @@ function Form({ route, method, initialValues, onSubmit, onCancel }) {
                 type="email"
                 placeholder="johndoe@email.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError("");
+                }}
                 required
-                status={focusedField === 'email' ? 'focused' : 'default'}
+                status={emailError ? 'error' : (focusedField === 'email' ? 'focused' : 'default')}
                 onFocus={() => handleFocus('email')}
                 onBlur={handleBlur}
+                message={emailError}
+                messageType="error"
             />
             <div className="password-container">
                 <InputField
