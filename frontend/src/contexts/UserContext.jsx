@@ -123,14 +123,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Fetch user data, balance summary, wallets, and transactions when the provider mounts
-  useEffect(() => {
-    fetchUserData();
-    fetchBalanceSummary();
-    fetchWallets();
-    fetchTransactions();
-  }, []);
-
   return (
     <UserContext.Provider
       value={{
