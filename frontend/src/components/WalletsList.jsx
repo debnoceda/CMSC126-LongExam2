@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import '../styles/WalletsList.css';
 import WalletCard from './WalletCard';
 import AddWalletButton from './AddWalletButton';
@@ -30,6 +30,10 @@ function WalletsList({ limit }) {
     fetchWallets(); // Refresh wallets after adding, updating, or deleting
     handleCloseModal();
   };
+
+  useEffect(() => {
+    fetchWallets();
+  }, []);
 
   // if (walletsLoading) return <p>Loading wallets...</p>;
   // if (walletsError) return <p>{walletsError}</p>;
