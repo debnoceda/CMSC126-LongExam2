@@ -5,7 +5,7 @@ import api from '../api';
  * Sample Usage in a component:
  * import { useContext } from 'react';
  * import { UserContext } from '../contexts/UserContext';
- * const { user, loading, error, fetchUserData, updateMonthlyBudget } = useContext(UserContext);
+ * const { user, loading, error, fetchUserData, updateMonthlyBudget, balanceSummary, fetchBalanceSummary } = useContext(UserContext);
  */
 
 export const UserContext = createContext();
@@ -14,6 +14,11 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [balanceSummary, setBalanceSummary] = useState({
+    total_balance: 0,
+    total_income: 0,
+    total_expense: 0,
+  });
 
   // Function to fetch user data
   const fetchUserData = async () => {
@@ -37,10 +42,15 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Fetch user data when the provider mounts
-  useEffect(() => {
-    fetchUserData();
-  }, []);
+  // Function to fetch balance summary
+  const fetchBalanceSummary = async () => {
+    try {
+      const response = await api.get('/api/transactions/total_balance/');
+      setBalanceSummary(response.data);
+    } catch (error) {
+      console.error('Error fetching balance summary:', error);
+    }
+  };
 
   // Function to update the monthly budget
   const updateMonthlyBudget = async (newBudget) => {
@@ -77,8 +87,25 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // Fetch user data and balance summary when the provider mounts
+  useEffect(() => {
+    fetchUserData();
+    fetchBalanceSummary();
+  }, []);
+
   return (
-    <UserContext.Provider value={{ user, setUser, loading, error, fetchUserData, updateMonthlyBudget }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        loading,
+        error,
+        fetchUserData,
+        updateMonthlyBudget,
+        balanceSummary,
+        fetchBalanceSummary,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

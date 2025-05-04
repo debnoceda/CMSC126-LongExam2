@@ -1,30 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
 import Card from '../components/Card';
 import '../styles/BalanceSummary.css'; // Import your CSS file for styling
 import FroggyImage from '../assets/Froggy.png';
-import api from '../api'; // Import your API instance
 
 function BalanceSummary() {
-  const [balanceSummary, setBalanceSummary] = useState({
-    total_balance: 0,
-    total_income: 0,
-    total_expense: 0,
-  });
-
-  useEffect(() => {
-    const fetchBalanceSummary = async () => {
-      try {
-        const response = await api.get('/api/transactions/total_balance/');
-        setBalanceSummary(response.data);
-      } catch (err) {
-        console.error('Failed to fetch balance summary:', err);
-        setError('Failed to load balance summary.');
-      } finally {
-      }
-    };
-
-    fetchBalanceSummary();
-  }, []);
+  const { balanceSummary } = useContext(UserContext); // Access balanceSummary from context
 
   return (
     <Card className="bg-main-color white-color balance-summary">
@@ -35,7 +16,7 @@ function BalanceSummary() {
       <div className="stats">
         <div className="stats-item">
           <p>Expenses</p>
-          <p className='bold'>${balanceSummary.total_expense.toFixed(2)}</p> 
+          <p className='bold'>${balanceSummary.total_expense.toFixed(2)}</p>
         </div>
         <div className="stats-item">
           <p>Income</p>
