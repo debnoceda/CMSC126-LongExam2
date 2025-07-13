@@ -2,6 +2,8 @@
 
 A modern web application for managing personal finances, built with **Django REST Framework** (backend) and **React Vite** (frontend).
 
+<img alt="Menu" src="https://github.com/debnoceda/CMSC126-LongExam2/blob/main/frontend/public/Frogetta-Cover.png">
+
 ## ✨ Features
 
 - **User Authentication**
